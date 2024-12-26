@@ -6,15 +6,16 @@ import {
   RecommendationCommand,
 } from './commands';
 import { resolve } from 'path';
-import { EmojiFlavor } from '@grammyjs/emoji';
+import { I18n } from '@grammyjs/i18n';
+import { Bot, session } from 'grammy';
 import { ConfigService } from '@nestjs/config';
-import { I18n, I18nFlavor } from '@grammyjs/i18n';
-import { Bot, Context, session, SessionFlavor } from 'grammy';
+import { MyContext } from './types/context.type';
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { languageCallback } from './features/callback/language.callback';
 
 @Injectable()
 export class BotService implements OnModuleInit, OnModuleDestroy {
-  private bot: Bot;
+  private bot: Bot<MyContext>;
 
   constructor(
     private readonly helpCommand: HelpCommand,
@@ -25,15 +26,10 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
     private readonly recommendationCommand: RecommendationCommand,
   ) {
     const token = this.configService.get<string>('TELEGRAM_BOT_TOKEN');
-    this.bot = new Bot(token);
+    this.bot = new Bot<MyContext>(token);
   }
 
   async onModuleInit() {
-    interface SessionData {
-      __language_code?: string;
-    }
-
-    type MyContext = Context & SessionFlavor<SessionData> & I18nFlavor & EmojiFlavor<Context>;
     const filePath = resolve(process.cwd(), 'locales');
 
     const i18n = new I18n<MyContext>({
@@ -58,7 +54,7 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
       this.bot.command('language', async (ctx) => this.languageCommand.execute(ctx));
       this.bot.command('instruction', async (ctx) => this.instructionCommand.execute(ctx));
       this.bot.command('recommendation', async (ctx) => this.recommendationCommand.execute(ctx));
-
+      this.bot.callbackQuery(['uz', 'ru', 'en'], async (ctx) => languageCallback(ctx));
       await this.bot.start();
       console.log('Bot started!');
     } catch (error) {

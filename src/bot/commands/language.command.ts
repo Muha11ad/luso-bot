@@ -1,19 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { ICommand } from './command.interface';
-import { getLanguageMessage } from '../utils/messages/language';
-import { InlineKeyboard } from 'grammy';
+import { MyContext } from '../types/context.type';
+import { getLanguageMessage } from '../utils/messages';
+import { filteredLanguageInlineKeyboards } from '../utils/keyboards';
 
-const inlineKeyboard = new InlineKeyboard([
-  [{ text: 'English 🇬🇧', callback_data: 'en' }],
-  [{ text: 'Русский 🇷🇺', callback_data: 'ru' }],
-  [{ text: "O'zbekcha 🇺🇿", callback_data: 'uz' }],
-]);
 @Injectable()
 export class LanguageCommand implements ICommand {
-  async execute(ctx): Promise<void> {
+  async execute(ctx: MyContext): Promise<void> {
     await ctx.reply(getLanguageMessage(ctx), {
-      reply_markup: inlineKeyboard,
+      reply_markup: filteredLanguageInlineKeyboards(ctx.session.language),
       parse_mode: 'HTML',
     });
+    
   }
 }

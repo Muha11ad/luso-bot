@@ -1,0 +1,1 @@
+export { getLanguageMessage } from './language';

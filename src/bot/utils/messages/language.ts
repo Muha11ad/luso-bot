@@ -1,14 +1,8 @@
-import { InlineKeyboard } from 'grammy';
+import { MyContext } from '@/bot/types';
 
-export const chooseLanguage = `
-English ${'🇬🇧'}
-Русский ${'🇷🇺'}
-O'zbekcha ${'🇺🇿'}
-`;
-
-export function getLanguageMessage(ctx): string {
+export function getLanguageMessage(ctx: MyContext): string {
   const choose_language = ctx.t('choose_language');
   return `
-  <strong>${choose_language} : </strong>
+  <strong>${choose_language} :</strong>
   `;
 }

@@ -1,5 +1,5 @@
-import { Context } from 'grammy';
+import { MyContext } from '../types';
 
 export interface ICommand {
-  execute(ctx: Context): Promise<void>;
+  execute(ctx: MyContext): Promise<void>;
 }
