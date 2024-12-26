@@ -5,8 +5,11 @@ import {
   InstructionCommand,
   RecommendationCommand,
 } from './commands';
-import { Bot } from 'grammy';
+import { resolve } from 'path';
+import { EmojiFlavor } from '@grammyjs/emoji';
 import { ConfigService } from '@nestjs/config';
+import { I18n, I18nFlavor } from '@grammyjs/i18n';
+import { Bot, Context, session, SessionFlavor } from 'grammy';
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 
 @Injectable()
@@ -26,8 +29,30 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit() {
+    interface SessionData {
+      __language_code?: string;
+    }
+
+    type MyContext = Context & SessionFlavor<SessionData> & I18nFlavor & EmojiFlavor<Context>;
+    const filePath = resolve(process.cwd(), 'locales');
+
+    const i18n = new I18n<MyContext>({
+      defaultLocale: 'ru',
+      useSession: true,
+      directory: filePath,
+    });
+
+    this.bot.use(
+      session({
+        initial: () => {
+          return {};
+        },
+      }),
+    );
+
+    this.bot.use(i18n.middleware());
+
     try {
-      // Register commands
       this.bot.command('help', async (ctx) => this.helpCommand.execute(ctx));
       this.bot.command('start', async (ctx) => this.startCommand.execute(ctx));
       this.bot.command('language', async (ctx) => this.languageCommand.execute(ctx));
