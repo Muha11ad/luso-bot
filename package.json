@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@grammyjs/types": "^3.17.0",
     "@nestjs/cache-manager": "^2.3.0",
     "@nestjs/common": "^10.4.15",
     "@nestjs/config": "^3.3.0",
@@ -27,11 +28,9 @@
     "@nestjs/platform-express": "^10.0.0",
     "cache-manager": "^5.7.6",
     "dotenv": "^16.4.7",
-    "nestjs-telegraf": "^2.8.1",
+    "grammy": "^1.33.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1",
-    "telegraf": "^4.16.3",
-    "telegraf-session-local": "^2.1.1"
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

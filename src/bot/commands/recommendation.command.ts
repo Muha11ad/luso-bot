@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { ICommand } from './command.interface';
 
 @Injectable()
-export class StartCommand implements ICommand {
+export class RecommendationCommand implements ICommand {
   async execute(ctx: Context): Promise<void> {
-    await ctx.reply('Hello! I am your bot!');
+    await ctx.reply('soon...');
   }
 }
