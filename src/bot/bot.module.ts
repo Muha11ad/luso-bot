@@ -1,17 +1,11 @@
 import { Module } from '@nestjs/common';
-import { GrammyModule } from 'nestjs-grammy';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { BotService } from './bot.service';
+import { ConfigModule } from '@nestjs/config';
+import { CacheModule } from '@nestjs/cache-manager';
+import { StartCommand } from './commands/start.command';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    GrammyModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        token: configService.get<string>('TELEGRAM_BOT_TOKEN'),
-      }),
-      inject: [ConfigService],
-    }),
-  ],
+  imports: [ConfigModule.forRoot(), CacheModule.register()],
+  providers: [BotService, StartCommand],
 })
 export class BotModule {}
