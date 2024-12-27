@@ -9,6 +9,7 @@ import { Module } from '@nestjs/common';
 import { BotService } from './bot.service';
 import { ConfigModule } from '@nestjs/config';
 import { CacheModule } from '@nestjs/cache-manager';
+import { botConfigProvider } from '@/config';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }), CacheModule.register()],
@@ -17,6 +18,7 @@ import { CacheModule } from '@nestjs/cache-manager';
     StartCommand,
     HelpCommand,
     LanguageCommand,
+    botConfigProvider,
     InstructionCommand,
     RecommendationCommand,
   ],

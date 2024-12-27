@@ -1,3 +1,4 @@
+export { COMMANDS } from './commands';
 export { HelpCommand } from './help.command';
 export { StartCommand } from './start.command';
 export { ICommand } from './command.interface';

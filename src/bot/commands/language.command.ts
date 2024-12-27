@@ -8,9 +8,8 @@ import { filteredLanguageInlineKeyboards } from '../utils/keyboards';
 export class LanguageCommand implements ICommand {
   async execute(ctx: MyContext): Promise<void> {
     await ctx.reply(getLanguageMessage(ctx), {
-      reply_markup: filteredLanguageInlineKeyboards(ctx.session.language),
+      reply_markup: filteredLanguageInlineKeyboards(ctx.session.__language_code),
       parse_mode: 'HTML',
     });
-    
   }
 }

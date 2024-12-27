@@ -1,9 +1,14 @@
 import { InlineKeyboard } from 'grammy';
 
+export const startLanguageInlineKeyboards = new InlineKeyboard([
+  [{ text: 'English 🇬🇧', callback_data: 'start_en' }],
+  [{ text: 'Русский 🇷🇺', callback_data: 'start_ru' }],
+  [{ text: "O'zbekcha 🇺🇿", callback_data: 'start_uz' }],
+]);
 export const languageInlineKeyboards = new InlineKeyboard([
-  [{ text: 'English 🇬🇧', callback_data: 'en' }],
-  [{ text: 'Русский 🇷🇺', callback_data: 'ru' }],
-  [{ text: "O'zbekcha 🇺🇿", callback_data: 'uz' }],
+  [{ text: 'English 🇬🇧', callback_data: 'lang_en' }],
+  [{ text: 'Русский 🇷🇺', callback_data: 'lang_ru' }],
+  [{ text: "O'zbekcha 🇺🇿", callback_data: 'lang_uz' }],
 ]);
 
 export function filteredLanguageInlineKeyboards(language: string): InlineKeyboard {

@@ -4,14 +4,13 @@ import {
   LanguageCommand,
   InstructionCommand,
   RecommendationCommand,
+  COMMANDS,
 } from './commands';
-import { resolve } from 'path';
-import { I18n } from '@grammyjs/i18n';
-import { Bot, session } from 'grammy';
+import { Bot } from 'grammy';
 import { ConfigService } from '@nestjs/config';
 import { MyContext } from './types/context.type';
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { languageCallback } from './features/callback/language.callback';
+import { startLanguageCallback, languageCallback } from './features/callback';
+import { Injectable, OnModuleInit, OnModuleDestroy, Inject } from '@nestjs/common';
 
 @Injectable()
 export class BotService implements OnModuleInit, OnModuleDestroy {
@@ -24,39 +23,33 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
     private readonly languageCommand: LanguageCommand,
     private readonly instructionCommand: InstructionCommand,
     private readonly recommendationCommand: RecommendationCommand,
+    @Inject('BOT_CONFIG') private readonly botConfig: any,
   ) {
     const token = this.configService.get<string>('TELEGRAM_BOT_TOKEN');
     this.bot = new Bot<MyContext>(token);
   }
 
   async onModuleInit() {
-    const filePath = resolve(process.cwd(), 'locales');
-
-    const i18n = new I18n<MyContext>({
-      defaultLocale: 'ru',
-      useSession: true,
-      directory: filePath,
-    });
-
-    this.bot.use(
-      session({
-        initial: () => {
-          return {};
-        },
-      }),
-    );
-
-    this.bot.use(i18n.middleware());
-
     try {
-      this.bot.command('help', async (ctx) => this.helpCommand.execute(ctx));
-      this.bot.command('start', async (ctx) => this.startCommand.execute(ctx));
-      this.bot.command('language', async (ctx) => this.languageCommand.execute(ctx));
-      this.bot.command('instruction', async (ctx) => this.instructionCommand.execute(ctx));
-      this.bot.command('recommendation', async (ctx) => this.recommendationCommand.execute(ctx));
-      this.bot.callbackQuery(['uz', 'ru', 'en'], async (ctx) => languageCallback(ctx));
+      this.bot.use(this.botConfig.sessionMiddleware);
+      this.bot.use(this.botConfig.i18nMiddleware);
+
+      this.bot.command(COMMANDS.HELP, async (ctx) => this.helpCommand.execute(ctx));
+      this.bot.command(COMMANDS.START, async (ctx) => this.startCommand.execute(ctx));
+      this.bot.command(COMMANDS.LANGUAGE, async (ctx) => this.languageCommand.execute(ctx));
+      this.bot.command(COMMANDS.INSTRUCTION, async (ctx) => this.instructionCommand.execute(ctx));
+      this.bot.command(COMMANDS.RECOMMENDATION, async (ctx) =>
+        this.recommendationCommand.execute(ctx),
+      );
+
+      this.bot.callbackQuery(['start_uz', 'start_ru', 'start_en'], async (ctx) =>
+        startLanguageCallback(ctx),
+      );
+      this.bot.callbackQuery(['lang_uz', 'lang_ru', 'lang_en'], async (ctx) =>
+        languageCallback(ctx),
+      );
+
       await this.bot.start();
-      console.log('Bot started!');
     } catch (error) {
       console.error('Failed to start bot:', error);
     }
