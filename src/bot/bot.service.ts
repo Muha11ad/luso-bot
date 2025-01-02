@@ -7,9 +7,10 @@ import {
   COMMANDS,
 } from './commands';
 import { Bot } from 'grammy';
+import { CALLBACK } from './types';
 import { ConfigService } from '@nestjs/config';
 import { MyContext } from './types/context.type';
-import { startLanguageCallback, languageCallback } from './features/callback';
+import { startLanguageCallback, languageCallback, ageCallback } from './features/callback';
 import { Injectable, OnModuleInit, OnModuleDestroy, Inject } from '@nestjs/common';
 
 @Injectable()
@@ -42,12 +43,9 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
         this.recommendationCommand.execute(ctx),
       );
 
-      this.bot.callbackQuery(['start_uz', 'start_ru', 'start_en'], async (ctx) =>
-        startLanguageCallback(ctx),
-      );
-      this.bot.callbackQuery(['lang_uz', 'lang_ru', 'lang_en'], async (ctx) =>
-        languageCallback(ctx),
-      );
+      this.bot.callbackQuery(CALLBACK.AGE, async (ctx) => ageCallback(ctx));
+      this.bot.callbackQuery(CALLBACK.LANGUAGE, async (ctx) => languageCallback(ctx));
+      this.bot.callbackQuery(CALLBACK.START, async (ctx) => startLanguageCallback(ctx));
 
       await this.bot.start();
     } catch (error) {
