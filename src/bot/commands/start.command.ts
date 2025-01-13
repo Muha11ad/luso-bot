@@ -1,15 +1,14 @@
 import { MyContext } from '../types';
 import { Injectable } from '@nestjs/common';
 import { ICommand } from './command.interface';
+import { deletePrevMessage } from '../utils/helpers';
+import { getLanguageMessage } from '../utils/messages';
 import { startLanguageInlineKeyboards } from '../utils/keyboards';
-import { getLanguageMessage, getWelcomeMessage } from '../utils/messages';
 
 @Injectable()
 export class StartCommand implements ICommand {
   async execute(ctx: MyContext): Promise<void> {
-    if (ctx['message']) {
-      await ctx.api.deleteMessage(ctx.message.chat.id, ctx.message.message_id);
-    }
+    deletePrevMessage(ctx);
 
     await ctx.reply(getLanguageMessage(ctx), {
       reply_markup: startLanguageInlineKeyboards,

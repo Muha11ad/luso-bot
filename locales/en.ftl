@@ -1,8 +1,8 @@
 choose_language =  Choose language
 
-welcome_message =  Welcome to our bot where you can :
-welcome_second_message =  Order product - We will reach you and deliver within a day.
-welcome_third_message =  Get personalized recommendations - Receive tailored product advice.
-welcome_fourth_message =  Instructions on how to use  - Learn how to use the products effectively.
+welcome_message =  Hello and welcome! 👋
+welcome_second_message =  🛠️ Try our mini app
+welcome_third_message =  🌟 Check out our recommendations
+welcome_fourth_message = 😊 Please inform us if you encounter any bugs or misinformation. 
 
 select_age = Select your age
