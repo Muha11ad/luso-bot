@@ -1,4 +1,4 @@
-import { Context } from 'grammy';
+import { MyContext } from '../types';
 import { Injectable } from '@nestjs/common';
 import { ICommand } from './command.interface';
 import { ConfigService } from '@nestjs/config';
@@ -7,12 +7,13 @@ import { ConfigService } from '@nestjs/config';
 export class HelpCommand implements ICommand {
   constructor(private readonly configService: ConfigService) {}
 
-  private prepareHelpMessage(): string {
-    const admin_username = this.configService.get<string>('ADMIN_USERNAME');
-    return `Any questions? Feel free to ask ${admin_username}!`;
+  private prepareHelpMessage(ctx: MyContext): string {
+    return `
+    ${ctx.t('help_message')} \n${ctx.t('help_second_message')}
+    `;
   }
 
-  async execute(ctx: Context): Promise<void> {
-    await ctx.reply(this.prepareHelpMessage());
+  async execute(ctx: MyContext): Promise<void> {
+    await ctx.reply(this.prepareHelpMessage(ctx));
   }
 }
