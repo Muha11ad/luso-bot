@@ -1,12 +1,9 @@
-import { MyContext } from '../types';
+import { MyContext } from '../../types';
 import { Injectable } from '@nestjs/common';
-import { ICommand } from './command.interface';
-import { ConfigService } from '@nestjs/config';
+import { ICommand } from '../command.interface';
 
 @Injectable()
 export class HelpCommand implements ICommand {
-  constructor(private readonly configService: ConfigService) {}
-
   private prepareHelpMessage(ctx: MyContext): string {
     return `
     ${ctx.t('help_message')} \n${ctx.t('help_second_message')}
