@@ -3,6 +3,6 @@ export interface SessionData {
   __language_code?: string;
   rec?: {
     age?: string;
-    skinType?: string;
+    skin_type?: string;
   };
 }

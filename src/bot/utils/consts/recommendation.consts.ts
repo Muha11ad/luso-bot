@@ -4,7 +4,7 @@ export const AGES_WITH_CALLBACK = AGES.map((age) => ({
   callback_data: `age_${age}`,
 }));
 
-export const SKIN_TYPES = ['dry_skin', 'oily_skin', 'sensetive_skin', 'combination_skin'];
+export const SKIN_TYPES = ['Dry_skin', 'Oily_skin', 'Sensetive_skin', 'Combination_skin'];
 export const SKIN_TYPES_WITH_CALLBACK = SKIN_TYPES.map((skinType) => ({
   text: skinType,
   callback_data: `skin_${skinType}`,

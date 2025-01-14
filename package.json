@@ -27,6 +27,7 @@
     "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^10.4.15",
     "@nestjs/platform-express": "^10.0.0",
+    "axios": "^1.7.9",
     "cache-manager": "^5.7.6",
     "dotenv": "^16.4.7",
     "grammy": "^1.33.0",

@@ -9,9 +9,10 @@ import {
   HelpCommand,
   StartCommand,
   LanguageCommand,
-  RecommendationCommand,
   CommandsService,
+  RecommendationCommand,
 } from './commands';
+import { ApiModule } from '@/api';
 import { Module } from '@nestjs/common';
 import { BotService } from './bot.service';
 import { botConfigProvider } from '@/config';
@@ -19,7 +20,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), CacheModule.register()],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), CacheModule.register(), ApiModule],
   providers: [
     BotService,
     HelpCommand,

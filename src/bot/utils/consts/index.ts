@@ -6,4 +6,5 @@ export {
 } from './recommendation.consts';
 export { COMMANDS } from './commands';
 export { CALLBACK } from './callback.consts';
+export { ENDPOINTS } from './endpoint.consts';
 export { LANGUAGE_KEYBOARDS, START_LANGUAGE_KEYBOARDS } from './languages.consts';
