@@ -14,6 +14,10 @@ price = Narxi :
 description = Qo'shimcha malumot : 
 find_product = Siz ushbu mahsulot haqida ko'proq bilib, mini ilovamizda buyurtma berishingiz mumkin 
 
+order_canceled = Sizning buyurmangiz bekor qilindi
+pay_order = Ushbu kartaga toʻlov qilgandan soʻng, skrinshot yuboring
+
+
 recommendation_third_message = 💖 Yangilanishlarni kuzatib boring!
 no_recommended_products = Tavsiya etilgan mahsulotlar topilmadi 😥
 recommendation_error = Kutilmagan xatolik ketdi. Iltimos, qayta urinib ko‘ring 😥.
@@ -26,6 +30,9 @@ select_skin_type = Yuzingiz teri turini tanlang
 
 dry_skin = Quruq
 oily_skin = Yog'li
-combination_skin = Kombinatsiya (Quruq & Yog'li)
 sensetive_skin = Sezgir (Allergiyaga moyil)
+combination_skin = Kombinatsiya (Quruq & Yog'li)
 
+send_only_location = Joylashuvingizni yuboring.
+send_only_image = Toʻlovni tasdiqlash uchun faqat rasmni yuboring.
+conversation_end = Joylashuv olindi, biz tez orada sizga qaytamiz. Rahmat!

@@ -3,6 +3,8 @@ import { CommandsService } from './commands';
 import { CallbacksService } from './callback';
 import { ConfigService } from '@nestjs/config';
 import { MyContext } from './types/context.type';
+import { confirmOrderConversation } from './utils/conversation';
+import { conversations, createConversation } from '@grammyjs/conversations';
 import { Injectable, OnModuleInit, OnModuleDestroy, Inject } from '@nestjs/common';
 
 @Injectable()
@@ -23,7 +25,8 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
     try {
       this.bot.use(this.botConfig.sessionMiddleware);
       this.bot.use(this.botConfig.i18nMiddleware);
-
+      this.bot.use(conversations());
+      this.bot.use(createConversation(confirmOrderConversation));
       this.commandsService.registerCommands(this.bot);
       this.callbacksService.registerCallbacks(this.bot);
 

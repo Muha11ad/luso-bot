@@ -1,6 +1,8 @@
 import {
   AgeCallback,
   CallbacksService,
+  CancelOrderCallback,
+  ConfirmOrderCallback,
   LanguageCallback,
   SkinTypeCallback,
   StartLanguageCallback,
@@ -32,6 +34,8 @@ import { CacheModule } from '@nestjs/cache-manager';
     LanguageCallback,
     SkinTypeCallback,
     botConfigProvider,
+    CancelOrderCallback,
+    ConfirmOrderCallback,
     StartLanguageCallback,
     RecommendationCommand,
   ],

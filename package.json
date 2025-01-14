@@ -19,6 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
   },
   "dependencies": {
+    "@grammyjs/conversations": "^1.2.0",
     "@grammyjs/emoji": "^1.2.0",
     "@grammyjs/i18n": "^1.1.2",
     "@grammyjs/types": "^3.17.0",

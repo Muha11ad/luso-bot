@@ -13,6 +13,10 @@ price = Price :
 description = Description : 
 find_product = You can find more about this product and order in out mini app 
 
+order_canceled = Your order has been canceled
+order_confirmed = Your order has been canceled
+pay_order = After paying to this card, please send screenshot
+
 no_recommended_products = No recommended products found 😥
 recommendation_third_message = 💖 Stay tuned for updates!
 recommendation_error = Something went wrong. Please try again 😥.
@@ -26,3 +30,7 @@ Dry_skin = Dry
 Oily_skin = Oily
 Combination_skin = Combination (Dry & Oily)
 Sensetive_skin = Sensitive (Allergic)
+
+conversation_end = Location received we will back to you soon. Thank you!
+send_only_location = Send your actual location.
+send_only_image = Send only image to confirm your payment.
