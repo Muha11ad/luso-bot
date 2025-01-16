@@ -28,11 +28,13 @@ select_age = Endi yoshingizni tanlang :
 select_skin_type = Yuzingiz teri turini tanlang
 
 
-dry_skin = Quruq
-oily_skin = Yog'li
-sensetive_skin = Sezgir (Allergiyaga moyil)
-combination_skin = Kombinatsiya (Quruq & Yog'li)
+Dry_skin = Quruq
+Oily_skin = Yog'li
+Sensetive_skin = Sezgir (Allergiyaga moyil)
+Combination_skin = Kombinatsiya (Quruq & Yog'li)
 
 send_only_location = Joylashuvingizni yuboring.
 send_only_image = Toʻlovni tasdiqlash uchun faqat rasmni yuboring.
 conversation_end = Joylashuv olindi, biz tez orada sizga qaytamiz. Rahmat!
+
+server_error = Server bilan bog'liq muammolarimiz bor, iltimos admin bilan bog'laning va keyinroq qayta urinib ko'ring😶‍🌫️

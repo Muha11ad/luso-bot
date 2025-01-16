@@ -17,9 +17,14 @@ export class LanguageCommand implements ICommand {
   }
 
   async execute(ctx: MyContext): Promise<void> {
-    await ctx.reply(this.getLanguageMessage(ctx), {
-      reply_markup: this.filteredLanguageInlineKeyboards(ctx.session.__language_code),
-      parse_mode: 'HTML',
-    });
+    try {
+      await ctx.reply(this.getLanguageMessage(ctx), {
+        reply_markup: this.filteredLanguageInlineKeyboards(ctx.session.__language_code),
+        parse_mode: 'HTML',
+      });
+    } catch (error) {
+      console.log(error);
+      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+    }
   }
 }

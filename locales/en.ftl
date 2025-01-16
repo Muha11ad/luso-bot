@@ -34,3 +34,5 @@ Sensetive_skin = Sensitive (Allergic)
 conversation_end = Location received we will back to you soon. Thank you!
 send_only_location = Send your actual location.
 send_only_image = Send only image to confirm your payment.
+
+server_error = We have some problems with server, please contact admin and try again later😶‍🌫️

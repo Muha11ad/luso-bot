@@ -14,15 +14,20 @@ export class AgeCallback implements ICallback {
     });
     return keyboard;
   }
+
   async handle(ctx: MyContext): Promise<void> {
-    const callbackQuery = ctx.callbackQuery;
-    const age = callbackQuery.data.split('_')[1];
-    ctx.session.rec = { ...ctx.session.rec, age };
+    try {
+      const callbackQuery = ctx.callbackQuery;
+      const age = callbackQuery.data.split('_')[1];
+      ctx.session.rec = { ...ctx.session.rec, age };
 
-    await deletePrevMessage(ctx);
+      await deletePrevMessage(ctx);
 
-    await ctx.reply(ctx.t('select_skin_type'), {
-      reply_markup: this.getSkinTypeKeyboard(ctx),
-    });
+      await ctx.reply(ctx.t('select_skin_type'), {
+        reply_markup: this.getSkinTypeKeyboard(ctx),
+      });
+    } catch (error) {
+      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+    }
   }
 }

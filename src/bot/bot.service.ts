@@ -6,6 +6,7 @@ import { MyContext } from './types/context.type';
 import { confirmOrderConversation } from './utils/conversation';
 import { conversations, createConversation } from '@grammyjs/conversations';
 import { Injectable, OnModuleInit, OnModuleDestroy, Inject } from '@nestjs/common';
+import { MyBotError } from './types';
 
 @Injectable()
 export class BotService implements OnModuleInit, OnModuleDestroy {
@@ -30,6 +31,16 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
       this.commandsService.registerCommands(this.bot);
       this.callbacksService.registerCallbacks(this.bot);
 
+      this.bot.catch((err: MyBotError) => {
+        const ctx = err.ctx;
+        console.log('Error:', err.error);
+        
+        if (err.error.error_code === 403) {
+          console.log(`Bot was blocked by user ${ctx.from.id}`);
+          return;
+        }
+        ctx.reply(ctx.t('server_error'));
+      });
       await this.bot.start();
     } catch (error) {
       console.error('Failed to start bot:', error);

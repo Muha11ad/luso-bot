@@ -24,10 +24,14 @@ export class ConfirmOrderCallback implements ICallback {
   }
 
   async handle(ctx: MyContext): Promise<void> {
-    await this.editMessage(ctx);
-    await ctx.reply(this.getMessage(ctx), {
-      parse_mode: 'HTML',
-    });
-    await ctx.conversation.enter('confirmOrderConversation');
+    try {
+      await this.editMessage(ctx);
+      await ctx.reply(this.getMessage(ctx), {
+        parse_mode: 'HTML',
+      });
+      await ctx.conversation.enter('confirmOrderConversation');
+    } catch (error) {
+      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+    }
   }
 }

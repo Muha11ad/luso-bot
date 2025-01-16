@@ -5,34 +5,48 @@ export async function confirmOrderConversation(
   conversation: Conversation<MyContext>,
   ctx: MyContext,
 ) {
-  const imageMessage = await conversation.waitFor('message:photo');
-  if (!imageMessage.message?.photo) {
-    await ctx.reply(ctx.t('send_only_image'));
-    return;
-  }
+  try {
+    // Wait for an image
+    let imageMessage;
+    while (!imageMessage) {
+      const message = await conversation.waitFor('message');
+      if (message.message?.photo) {
+        imageMessage = message;
+      } else {
+        await ctx.reply(ctx.t('send_only_image'));
+      }
+    }
 
-  const photo = imageMessage.message.photo[imageMessage.message.photo.length - 1];
-  const adminChatId = process.env.ADMIN_TELEGRAM_ID;
-  await ctx.api.sendPhoto(adminChatId, photo.file_id, {
-    caption: `#${ctx.from.id}`,
-  });
+    const photo = imageMessage.message.photo[imageMessage.message.photo.length - 1];
+    const adminChatId = process.env.ADMIN_TELEGRAM_ID;
+    await ctx.api.sendPhoto(adminChatId, photo.file_id, {
+      caption: `#${ctx.from.id}`,
+    });
 
-  await ctx.reply(ctx.t('send_only_location'));
-
-  const locationMessage = await conversation.waitFor('message:location');
-  if (!locationMessage.message?.location) {
     await ctx.reply(ctx.t('send_only_location'));
-    return;
-  }
 
-  const location = locationMessage.message.location;
-  await ctx.api.sendVenue(
-    adminChatId,
-    location.latitude,
-    location.longitude,
-    `#${ctx.from.id}`,
-    'LOCATION',
-  );
-  await ctx.reply(ctx.t('conversation_end'));
-  await ctx.conversation.exit('confirmOrderConversation');
+    let locationMessage;
+    while (!locationMessage) {
+      const message = await conversation.waitFor('message');
+      if (message.message?.location) {
+        locationMessage = message;
+      } else {
+        await ctx.reply(ctx.t('send_only_location'));
+      }
+    }
+
+    const location = locationMessage.message.location;
+    await ctx.api.sendVenue(
+      adminChatId,
+      location.latitude,
+      location.longitude,
+      `#${ctx.from.id}`,
+      'LOCATION',
+    );
+    await ctx.reply(ctx.t('conversation_end'))
+    return
+  } catch (error) {
+    console.error(error);
+    await ctx.reply(ctx.t('server_error'));
+  }
 }

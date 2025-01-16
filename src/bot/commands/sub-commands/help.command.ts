@@ -11,6 +11,11 @@ export class HelpCommand implements ICommand {
   }
 
   async execute(ctx: MyContext): Promise<void> {
-    await ctx.reply(this.prepareHelpMessage(ctx));
+    try {
+      await ctx.reply(this.prepareHelpMessage(ctx));
+    } catch (error) {
+      console.error(error);
+      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+    }
   }
 }

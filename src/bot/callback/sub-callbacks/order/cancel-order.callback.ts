@@ -13,10 +13,15 @@ export class CancelOrderCallback implements ICallback {
   }
 
   async handle(ctx: MyContext): Promise<void> {
-    await deletePrevMessage(ctx);
-    await ctx.answerCallbackQuery({ text: ctx.t('order_canceled') });
-    await ctx.api.sendMessage(this.configService.get('ADMIN_TELEGRAM_ID'), this.getMessage(ctx), {
-      parse_mode: 'HTML',
-    });
+    try {
+      await deletePrevMessage(ctx);
+      await ctx.answerCallbackQuery({ text: ctx.t('order_canceled') });
+      await ctx.api.sendMessage(this.configService.get('ADMIN_TELEGRAM_ID'), this.getMessage(ctx), {
+        parse_mode: 'HTML',
+      });
+    } catch (error) {
+      console.error('Error handling cancel order callback:', error);
+      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+    }
   }
 }

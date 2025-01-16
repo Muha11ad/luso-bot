@@ -18,15 +18,20 @@ export class StartLanguageCallback implements ICallback {
   }
 
   async handle(ctx: MyContext): Promise<void> {
-    const callbackQuery = ctx.callbackQuery;
-    const language = callbackQuery.data.split('_')[1];
+    try {
+      const callbackQuery = ctx.callbackQuery;
+      const language = callbackQuery.data.split('_')[1];
 
-    ctx.i18n.setLocale(language);
-    await ctx.answerCallbackQuery(`Language set to ${language}`);
-    deletePrevMessage(ctx);
+      ctx.i18n.setLocale(language);
+      await ctx.answerCallbackQuery(`Language set to ${language}`);
+      deletePrevMessage(ctx);
 
-    await ctx.reply(this.getWelcomeMessage(ctx), {
-      parse_mode: 'Markdown',
-    });
+      await ctx.reply(this.getWelcomeMessage(ctx), {
+        parse_mode: 'Markdown',
+      });
+    } catch (error) {
+      console.error(error);
+      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+    }
   }
 }

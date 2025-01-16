@@ -17,11 +17,16 @@ export class StartCommand implements ICommand {
     return new InlineKeyboard(keyboards);
   }
   async execute(ctx: MyContext): Promise<void> {
-    deletePrevMessage(ctx);
+    try {
+      deletePrevMessage(ctx);
 
-    await ctx.reply(this.getLanguageMessage(ctx), {
-      reply_markup: this.startLanguageInlineKeyboards(),
-      parse_mode: 'HTML',
-    });
+      await ctx.reply(this.getLanguageMessage(ctx), {
+        reply_markup: this.startLanguageInlineKeyboards(),
+        parse_mode: 'HTML',
+      });
+    } catch (error) {
+      console.log(error);
+      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+    }
   }
 }

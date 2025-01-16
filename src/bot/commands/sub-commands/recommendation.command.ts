@@ -21,10 +21,15 @@ export class RecommendationCommand implements ICommand {
     return keyboard;
   }
   async execute(ctx: MyContext): Promise<void> {
-    await deletePrevMessage(ctx);
-    await ctx.reply(this.getRecommendationMessage(ctx), {
-      parse_mode: 'Markdown',
-      reply_markup: this.getAgeKeyboard(),
-    });
+    try {
+      await deletePrevMessage(ctx);
+      await ctx.reply(this.getRecommendationMessage(ctx), {
+        parse_mode: 'Markdown',
+        reply_markup: this.getAgeKeyboard(),
+      });
+    } catch (error) {
+      console.log(error);
+      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+    }
   }
 }
