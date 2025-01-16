@@ -11,6 +11,7 @@
     "build": "nest build",
     "start": "nest start",
     "test:watch": "jest --watch",
+    "postbuild": "cp -r ./src/locales ./dist/locales",
     "test:cov": "jest --coverage",
     "start:prod": "node dist/main",
     "start:dev": "nest start --watch",
