@@ -35,11 +35,18 @@ export class SkinTypeCallback implements ICallback {
         await ctx.reply(ctx.t('no_recommended_products'));
         return;
       }
+      console.log(res);
       for (const product of res) {
-        await ctx.replyWithPhoto(product?.Images[0].imageUrl, {
-          caption: this.getCaption(product, ctx),
-          parse_mode: 'HTML',
-        });
+        if (product?.Images && product.Images.length > 0) {
+          await ctx.replyWithPhoto(product?.Images[0]?.imageUrl, {
+            caption: this.getCaption(product, ctx),
+            parse_mode: 'HTML',
+          });
+        } else {
+          await ctx.reply(this.getCaption(product, ctx), {
+            parse_mode: 'HTML',
+          });
+        }
       }
     } catch (error) {
       console.log(error);

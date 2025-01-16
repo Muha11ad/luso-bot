@@ -12,6 +12,10 @@ export class ApiService {
   private apiClient() {
     return axios.create({
       baseURL: this.baseUrl,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      withCredentials: true,
     });
   }
   public async getData<T>(endpoint: string) {
