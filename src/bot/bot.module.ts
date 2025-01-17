@@ -17,7 +17,6 @@ import {
 import { ApiModule } from '@/api';
 import { Module } from '@nestjs/common';
 import { BotService } from './bot.service';
-import { botConfigProvider } from '@/config';
 import { ConfigModule } from '@nestjs/config';
 import { CacheModule } from '@nestjs/cache-manager';
 
@@ -33,7 +32,6 @@ import { CacheModule } from '@nestjs/cache-manager';
     CallbacksService,
     LanguageCallback,
     SkinTypeCallback,
-    botConfigProvider,
     CancelOrderCallback,
     ConfirmOrderCallback,
     StartLanguageCallback,
