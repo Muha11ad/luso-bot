@@ -1,12 +1,13 @@
-import { Bot } from 'grammy';
+import { Bot, session } from 'grammy';
+import { i18n } from '@/config';
+import { MyBotError, SessionData } from './types';
 import { CommandsService } from './commands';
 import { CallbacksService } from './callback';
 import { ConfigService } from '@nestjs/config';
 import { MyContext } from './types/context.type';
 import { confirmOrderConversation } from './utils/conversation';
 import { conversations, createConversation } from '@grammyjs/conversations';
-import { Injectable, OnModuleInit, OnModuleDestroy, Inject } from '@nestjs/common';
-import { MyBotError } from './types';
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 
 @Injectable()
 export class BotService implements OnModuleInit, OnModuleDestroy {
@@ -16,7 +17,6 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
     private readonly configService: ConfigService,
     private readonly commandsService: CommandsService,
     private readonly callbacksService: CallbacksService,
-    @Inject('BOT_CONFIG') private readonly botConfig: any,
   ) {
     const token = this.configService.get<string>('TELEGRAM_BOT_TOKEN');
     this.bot = new Bot<MyContext>(token);
@@ -24,8 +24,16 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     try {
-      this.bot.use(this.botConfig.sessionMiddleware);
-      this.bot.use(this.botConfig.i18nMiddleware);
+      this.bot.use(
+        session({
+          initial: (): SessionData => ({
+            rec: {},
+            step: '',
+            __language_code: undefined,
+          }),
+        }),
+      );
+      this.bot.use(i18n.middleware());
       this.bot.use(conversations());
       this.bot.use(createConversation(confirmOrderConversation));
       this.commandsService.registerCommands(this.bot);
@@ -34,7 +42,7 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
       this.bot.catch((err: MyBotError) => {
         const ctx = err.ctx;
         console.log('Error:', err.error);
-        
+
         if (err.error.error_code === 403) {
           console.log(`Bot was blocked by user ${ctx.from.id}`);
           return;

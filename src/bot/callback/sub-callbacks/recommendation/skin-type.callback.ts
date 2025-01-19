@@ -35,7 +35,6 @@ export class SkinTypeCallback implements ICallback {
         await ctx.reply(ctx.t('no_recommended_products'));
         return;
       }
-      console.log(res);
       for (const product of res) {
         if (product?.Images && product.Images.length > 0) {
           await ctx.replyWithPhoto(product?.Images[0]?.imageUrl, {
