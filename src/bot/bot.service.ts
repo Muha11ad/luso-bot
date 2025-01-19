@@ -1,10 +1,10 @@
 import { Bot, session } from 'grammy';
 import { i18n } from '@/config';
-import { MyBotError, SessionData } from './types';
 import { CommandsService } from './commands';
 import { CallbacksService } from './callback';
 import { ConfigService } from '@nestjs/config';
 import { MyContext } from './types/context.type';
+import { MyBotError, SessionData } from './types';
 import { confirmOrderConversation } from './utils/conversation';
 import { conversations, createConversation } from '@grammyjs/conversations';
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';

@@ -1,4 +1,4 @@
-export const AGES = ['16-25', '25-35', '35-45', '50-55', '50+'];
+export const AGES = ['16+', '18+', '25+', '35+', '45+'];
 export const AGES_WITH_CALLBACK = AGES.map((age) => ({
   text: age,
   callback_data: `age_${age}`,
