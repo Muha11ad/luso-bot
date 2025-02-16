@@ -3,6 +3,7 @@ export const COMMANDS = {
     HELP: 'help',
     START: 'start',
     LANGUAGE: 'language',
+    SEND_CONTENT: 'send_content',
     RECOMMENDATION: 'recommendation',
 
 }
@@ -56,6 +57,6 @@ export const CALLBACK = {
 };
 
 export const CONVERSATIONS = {
-    recommendation: 'recommendationConversation',
+    sendContent: 'sendContentConversation',
     confirm_order: 'confirmOrderConversation',
 }

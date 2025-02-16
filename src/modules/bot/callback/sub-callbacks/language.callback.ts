@@ -1,6 +1,7 @@
-import { MyContext } from '@/shared/utils/types';
 import { Injectable } from '@nestjs/common';
+import { MyContext } from '@/shared/utils/types';
 import { ICallback } from '../callback.interface';
+import { handleBotError } from '@/shared/utils/helpers';
 
 @Injectable()
 export class LanguageCallback implements ICallback {
@@ -22,9 +23,9 @@ export class LanguageCallback implements ICallback {
 
     } catch (error) {
 
-      console.log(error);
-      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
-      
+      return handleBotError(error, LanguageCallback.name, ctx);
+
     }
   }
+
 }

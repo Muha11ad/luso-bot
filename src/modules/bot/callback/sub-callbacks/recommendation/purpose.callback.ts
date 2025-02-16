@@ -1,15 +1,15 @@
 import { ApiService } from '@/modules/api';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ICallback } from '../callback.interface';
+import { ICallback } from '../../callback.interface';
 import { IProduct, MyContext } from '@/shared/utils/types';
-import { addThousandSeparator, deletePrevMessage } from '@/shared/utils/helpers';
 import { RecommendationCreateClientReq } from '@/modules/api/api.types';
+import { addThousandSeparator, deletePrevMessage, handleBotError } from '@/shared/utils/helpers';
 
 
 
 @Injectable()
-export class RecommendationCallback implements ICallback {
+export class PurposeCallback implements ICallback {
 
   constructor(
     private readonly apiService: ApiService,
@@ -26,8 +26,6 @@ export class RecommendationCallback implements ICallback {
       const purpose = callbackQuery.data.split('_')[1];
 
       ctx.session.rec = { ...ctx.session.rec, purpose };
-
-      await deletePrevMessage(ctx);
 
       if (!ctx.session.rec.age && !ctx.session.rec.purpose && !ctx.session.rec.skinType) {
 
@@ -63,8 +61,7 @@ export class RecommendationCallback implements ICallback {
 
     } catch (error) {
 
-      console.log(error);
-      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+      return handleBotError(error, PurposeCallback.name, ctx);
 
     }
 

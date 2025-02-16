@@ -3,7 +3,11 @@ import { EmojiFlavor } from '@grammyjs/emoji';
 import { Context, SessionFlavor } from 'grammy';
 import { ConversationFlavor } from '@grammyjs/conversations';
 
-export type MyContext = Context & SessionFlavor<SessionData> & I18nFlavor & EmojiFlavor<Context> & ConversationFlavor;
+export type MyContext = Context & SessionFlavor<SessionData> & I18nFlavor & EmojiFlavor<Context> & ConversationFlavor & {
+  bot: {
+    on: (event: string, callback: (ctx: any) => void) => void;
+  };
+}
 
 interface GrammyError {
   method: string;
@@ -18,19 +22,19 @@ interface GrammyError {
 }
 
 export interface SessionData {
-    step: string;
-    __language_code?: string;
-    rec?: {
-        age?: string;
-        skinType?: string;
-        purpose?: string;
-    };
+  step: string;
+  __language_code?: string;
+  rec?: {
+    age?: string;
+    skinType?: string;
+    purpose?: string;
+  };
 }
 
 export interface ITranslation {
-    uz: string;
-    ru: string;
-    en: string;
+  uz: string;
+  ru: string;
+  en: string;
 }
 
 export interface MyBotError extends Error {

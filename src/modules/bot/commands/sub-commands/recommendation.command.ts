@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ICommand } from '../command.interface';
 import { MyContext } from '@/shared/utils/types';
 import { handleBotError } from '@/shared/utils/helpers';
-import { AGES_WITH_CALLBACK, COMMANDS, CONVERSATIONS } from '@/shared/utils/consts';
+import { AGES_WITH_CALLBACK, COMMANDS } from '@/shared/utils/consts';
 
 @Injectable()
 export class RecommendationCommand implements ICommand {
@@ -16,8 +16,6 @@ export class RecommendationCommand implements ICommand {
         parse_mode: 'Markdown',
         reply_markup: this.getAgeKeyboard(),
       })
-
-      await ctx.conversation.enter(CONVERSATIONS.recommendation)
 
     } catch (error) {
 

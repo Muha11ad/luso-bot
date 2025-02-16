@@ -8,7 +8,7 @@ import { confirmOrderConversation } from '@/shared/conversation';
 import { MyBotError, MyContext, SessionData } from '@/shared/utils/types';
 import { conversations, createConversation } from '@grammyjs/conversations';
 import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
-import { recommendationConversation } from '@/shared/conversation/recommendation.conversation';
+import { sendContentConversation } from '@/shared/conversation/sendContent.conversation';
 
 @Injectable()
 export class BotService implements OnModuleInit, OnModuleDestroy {
@@ -40,7 +40,7 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
       this.bot.use(i18n.middleware());
       this.bot.use(conversations());
       this.bot.use(createConversation(confirmOrderConversation));
-      this.bot.use(createConversation(recommendationConversation));
+      this.bot.use(createConversation(sendContentConversation));
 
       this.commandsService.registerCommands(this.bot);
       this.callbacksService.registerCallbacks(this.bot);
