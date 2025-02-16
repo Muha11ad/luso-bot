@@ -1,4 +1,4 @@
-import { MyContext } from '@/shared/types';
+import { MyContext } from '@/shared/utils/types';
 import { Injectable } from '@nestjs/common';
 import { ICallback } from '../callback.interface';
 

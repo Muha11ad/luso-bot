@@ -24,12 +24,13 @@ recommendation_second_message = 🚀 We’re continuously improving it to enhanc
 recommendation_message = ✨ This feature and data were developed in collaboration with professional cosmetologists.
 
 select_age = Now, please select your age : 
-select_skin_type = Choose your skin type
+select_skin_type = Choose your skin type :
+select_purpose = What's bothering you ?
 
-Dry_skin = Dry
-Oily_skin = Oily
-Combination_skin = Combination (Dry & Oily)
-Sensetive_skin = Sensitive (Allergic)
+Dry = Dry
+Oily = Oily
+Combination = Combination (Dry & Oily)
+Sensetive = Sensitive (Allergic)
 
 conversation_end = Location received we will back to you soon. Thank you!
 send_only_location = Send your actual location.

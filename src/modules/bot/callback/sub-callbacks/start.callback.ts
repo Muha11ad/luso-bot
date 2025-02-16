@@ -1,7 +1,7 @@
-import { MyContext } from '@/shared/types';
 import { Injectable } from '@nestjs/common';
+import { MyContext } from '@/shared/utils/types';
 import { ICallback } from '../callback.interface';
-import { deletePrevMessage } from '@/shared/utils';
+import { deletePrevMessage, handleBotError } from '@/shared/utils/helpers';
 
 @Injectable()
 export class StartLanguageCallback implements ICallback {
@@ -22,12 +22,11 @@ export class StartLanguageCallback implements ICallback {
       });
 
     } catch (error) {
-      
-      console.error(error);
-      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
-    
+
+      return handleBotError(error, 'start', ctx);
+
     }
-  
+
   }
 
   private getWelcomeMessage(ctx: MyContext) {

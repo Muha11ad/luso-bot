@@ -1,8 +1,9 @@
 import { InlineKeyboard } from 'grammy';
-import { MyContext } from '@/shared/types';
 import { Injectable } from '@nestjs/common';
 import { ICommand } from '../command.interface';
-import { LANGUAGE_KEYBOARDS } from '@/shared/utils';
+import { MyContext } from '@/shared/utils/types';
+import { handleBotError } from '@/shared/utils/helpers';
+import { COMMANDS, LANGUAGE_KEYBOARDS } from '@/shared/utils/consts';
 
 @Injectable()
 export class LanguageCommand implements ICommand {
@@ -18,8 +19,7 @@ export class LanguageCommand implements ICommand {
     
     } catch (error) {
     
-      console.log(error);
-      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+      return handleBotError(error, COMMANDS.LANGUAGE, ctx);
     
     }
   }

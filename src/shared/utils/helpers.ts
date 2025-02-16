@@ -1,7 +1,8 @@
-import { MyContext } from '@/shared/types';
+import { MyContext } from "./types";
+import { CustomLogger } from "@/shared/logger/custom.logger";
 
 export function addThousandSeparator(value: number): string {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
 export async function deletePrevMessage(ctx: MyContext) {
@@ -23,5 +24,30 @@ export async function deletePrevMessage(ctx: MyContext) {
     }
   } catch (error) {
     console.error('Failed to delete previous message:', error);
+  }
+}
+
+export function handleApiError(error: any, endpoint: string, method: string) {
+
+  const logger = new CustomLogger('Helpers');
+
+  logger.error(`Failed to call ${method} ${endpoint}:`, error.response.data.error);
+
+  return error.response.data;
+
+}
+
+export async function handleBotError(error: any, command: string, ctx: MyContext,) {
+
+  console.log(`Failed to execute command ${command}:`, error);
+  
+  if (ctx?.callbackQuery) {
+
+    await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+
+  } else{
+
+    await ctx.reply(ctx.t('server_error'));
+
   }
 }

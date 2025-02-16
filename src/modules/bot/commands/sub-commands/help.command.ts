@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { MyContext } from '@/shared/types';
 import { ICommand } from '../command.interface';
+import { MyContext } from '@/shared/utils/types';
+import { COMMANDS } from '@/shared/utils/consts';
+import { handleBotError } from '@/shared/utils/helpers';
 
 @Injectable()
 export class HelpCommand implements ICommand {
@@ -13,8 +15,7 @@ export class HelpCommand implements ICommand {
     
     } catch (error) {
     
-      console.error(error);
-      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+      return handleBotError(error, COMMANDS.HELP, ctx);
     
     }
   }

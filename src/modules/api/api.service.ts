@@ -1,65 +1,74 @@
-import axios from 'axios';
-import { ApiError } from './types';
 import { Injectable } from '@nestjs/common';
+import axios, { AxiosInstance } from 'axios';
 import { ConfigService } from '@nestjs/config';
+import { IProduct } from '@/shared/utils/types';
+import { ENDPOINTS } from '@/shared/utils/consts';
+import { handleApiError } from '@/shared/utils/helpers';
+import { RecommendationCreateClientReq, ResponseType, UserCreateReq, UserType } from './api.types';
 
 @Injectable()
 export class ApiService {
 
   private baseUrl: string;
+  private apiClient: AxiosInstance;
 
-  constructor(private readonly configService: ConfigService) {
-    this.baseUrl = this.configService.get<string>('API_BASE_URL');
-  }
-
-  private apiClient() {
-
-    return axios.create({
+  constructor(private readonly config: ConfigService) {
+    this.baseUrl = this.config.get<string>('api.baseUrl');
+    this.apiClient = axios.create({
       baseURL: this.baseUrl,
       headers: {
-        options: {
-          origin: this.configService.get<string>('ORIGIN'),
-        },
         'Content-Type': 'application/json',
+        options: {
+          origin: this.config.get<string>('api.origin'),
+        },
       },
       withCredentials: true,
     });
-
   }
 
-  public async getData<T>(endpoint: string) {
+  public async getRecommendedProducts(data: RecommendationCreateClientReq): Promise<ResponseType<IProduct[]>> {
 
     try {
-      const response = await this.apiClient().get<T>(endpoint);
-      return response.data;
 
-    } catch (e) {
+      const result = await this.postData<IProduct[], RecommendationCreateClientReq>(ENDPOINTS.RECOMMENDATION, data);
 
-      return {
-        message: e.response?.data?.message || 'An error occurred',
-        error: e.response?.data?.error || 'Unknown Error',
-        statusCode: e.response?.status || 500,
-      };
+      return result;
+
+    } catch (error) {
+
+      return error.response.data;
 
     }
 
   }
 
-  public async postData<T, D>(endpoint: string, data: D): Promise<T | ApiError> {
-  
+  public async createOrGetUser(data: UserCreateReq): Promise<boolean> {
+
     try {
-  
-      const response = await this.apiClient().post<T>(endpoint, data);
-      return response.data;
-  
-    } catch (e: any) {
-  
-      return {
-        message: e.response?.data?.message || 'An error occurred',
-        error: e.response?.data?.error || 'Unknown Error',
-        statusCode: e.response?.status || 500,
-      };
-  
+
+      const result = await this.postData<UserType, UserCreateReq>(ENDPOINTS.CREAET_USER, data);
+      return result.success;
+
+    } catch (error) {
+
+      return error.response.data.success
+
     }
   }
+
+  private async postData<T, D = {}>(endpoint: string, data: D): Promise<ResponseType<T>> {
+
+    try {
+
+      const response = await this.apiClient.post<ResponseType<T>>(endpoint, data);
+      return response.data;
+
+    } catch (error) {
+
+      return handleApiError(error, endpoint, 'POST');
+
+    }
+
+  }
+
 }

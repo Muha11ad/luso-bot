@@ -1,8 +1,8 @@
-import { MyContext } from '@/shared/types';
+import { MyContext } from '@/shared/utils/types';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ICallback } from '../../callback.interface';
-import { deletePrevMessage } from '@/shared/utils';
+import { deletePrevMessage } from '@/shared/utils/helpers';
 
 @Injectable()
 export class CancelOrderCallback implements ICallback {

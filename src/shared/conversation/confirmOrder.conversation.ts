@@ -1,10 +1,9 @@
-import { MyContext } from '@/shared/types';
+import { MyContext } from '../utils/types';
+import { handleBotError } from '../utils/helpers';
 import { Conversation } from '@grammyjs/conversations';
 
-export async function confirmOrderConversation(
-  conversation: Conversation<MyContext>,
-  ctx: MyContext,
-) {
+export async function confirmOrderConversation(conversation: Conversation<MyContext>, ctx: MyContext,) {
+  
   try {
     // Wait for an image
     const imageMessage = await conversation.waitFor(':photo', {
@@ -13,6 +12,7 @@ export async function confirmOrderConversation(
 
     const photo = imageMessage.message.photo[imageMessage.message.photo.length - 1];
     const adminChatId = process.env.ADMIN_TELEGRAM_ID;
+    
     await ctx.api.sendPhoto(adminChatId, photo.file_id, {
       caption: `#${ctx.from.id}`,
     });
@@ -25,6 +25,7 @@ export async function confirmOrderConversation(
     });
 
     const location = locationMessage.message.location;
+    
     await ctx.api.sendVenue(
       adminChatId,
       location.latitude,
@@ -34,9 +35,11 @@ export async function confirmOrderConversation(
     );
 
     await ctx.reply(ctx.t('conversation_end'));
+    
     return
   } catch (error) {
-    console.error(error);
-    await ctx.reply(ctx.t('server_error'));
+  
+    return handleBotError(error, 'order', ctx);
+    
   }
 }

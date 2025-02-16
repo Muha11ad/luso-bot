@@ -26,12 +26,12 @@ recommendation_second_message = 🚀 Biz uni doimiy ravishda yaxshilab, sizning 
 
 select_age = Endi yoshingizni tanlang : 
 select_skin_type = Yuzingiz teri turini tanlang
+select_purpose = Sizni nima bezovta qilmoqda ?
 
-
-Dry_skin = Quruq
-Oily_skin = Yog'li
-Sensetive_skin = Sezgir (Allergiyaga moyil)
-Combination_skin = Kombinatsiya (Quruq & Yog'li)
+Dry = Quruq
+Oily = Yog'li
+Sensetive = Sezgir (Allergiyaga moyil)
+Combination = Kombinatsiya (Quruq & Yog'li)
 
 send_only_location = Joylashuvingizni yuboring.
 send_only_image = Toʻlovni tasdiqlash uchun faqat rasmni yuboring.

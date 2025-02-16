@@ -1,4 +1,4 @@
-import Joi from "joi";
+import * as Joi from "joi";
 
 export const configSchema = Joi.object({
     
@@ -8,11 +8,12 @@ export const configSchema = Joi.object({
     ADMIN_TELEGRAM_ID: Joi.number(),
 
     API_BASE_URL: Joi.string(),
+    API_ORIGIN: Joi.string(),
 
     CART_DETAILS: Joi.string(),
 
     TELEGRAM_BOT_TOKEN: Joi.string(),
+    TELEGRAM_WEB_APP_URL: Joi.string(),
 
-    ORIGIN: Joi.string(),
 
 }).options({ presence: "required" });

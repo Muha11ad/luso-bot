@@ -1,13 +1,15 @@
 export const COMMANDS = {
+    APP: 'app',
     HELP: 'help',
     START: 'start',
     LANGUAGE: 'language',
-    INSTRUCTION: 'instruction',
     RECOMMENDATION: 'recommendation',
+
 }
 
 export const ENDPOINTS = {
-    RECOMMENDATION: 'product/filter',
+    CREAET_USER: 'landing/user',
+    RECOMMENDATION: 'landing/product/filter',
 };
 
 export const LANGUAGE_KEYBOARDS = [
@@ -29,11 +31,18 @@ export const AGES_WITH_CALLBACK = AGES.map((age) => ({
     callback_data: `age_${age}`,
 }));
 
-export const SKIN_TYPES = ['Dry_skin', 'Oily_skin', 'Sensetive_skin', 'Combination_skin'];
+export const SKIN_TYPES = ['Dry', 'Oily', 'Sensetive', 'Combination'];
 
 export const SKIN_TYPES_WITH_CALLBACK = SKIN_TYPES.map((skinType) => ({
     text: skinType,
     callback_data: `skin_${skinType}`,
+}));
+
+export const PURPOSES = ['Acne', 'Anti-Aging', 'Brightening', 'Hydrating', 'Pore Care', 'Whitening'];
+
+export const PURPOSES_WITH_CALLBACK = PURPOSES.map((purpose) => ({
+    text: purpose,
+    callback_data: `purpose_${purpose}`,
 }));
 
 export const CALLBACK = {
@@ -43,4 +52,10 @@ export const CALLBACK = {
     START: ['start_uz', 'start_ru', 'start_en'],
     AGE: AGES_WITH_CALLBACK.map((value) => value.callback_data),
     SKIN_TYPE: SKIN_TYPES_WITH_CALLBACK.map((value) => value.callback_data),
+    PURPOSE: PURPOSES_WITH_CALLBACK.map((value) => value.callback_data),
 };
+
+export const CONVERSATIONS = {
+    recommendation: 'recommendationConversation',
+    confirm_order: 'confirmOrderConversation',
+}

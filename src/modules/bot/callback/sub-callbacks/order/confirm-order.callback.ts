@@ -1,7 +1,8 @@
-import { MyContext } from '@/shared/types';
+import { MyContext } from '@/shared/utils/types';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ICallback } from '../../callback.interface';
+import { CONVERSATIONS } from '@/shared/utils/consts';
 
 @Injectable()
 export class ConfirmOrderCallback implements ICallback {
@@ -16,7 +17,7 @@ export class ConfirmOrderCallback implements ICallback {
       await ctx.reply(this.getMessage(ctx), {
         parse_mode: 'HTML',
       });
-      await ctx.conversation.enter('confirmOrderConversation');
+      await ctx.conversation.enter(CONVERSATIONS.confirm_order);
 
     } catch (error) {
 

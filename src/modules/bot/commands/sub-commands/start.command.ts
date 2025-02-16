@@ -1,17 +1,30 @@
-import { InlineKeyboard } from 'grammy';
-import { MyContext } from '@/shared/types';
+import { InlineKeyboard, Keyboard } from 'grammy';
+import { ApiService } from '@/modules/api';
 import { Injectable } from '@nestjs/common';
 import { ICommand } from '../command.interface';
-import { deletePrevMessage, START_LANGUAGE_KEYBOARDS } from '@/shared/utils';
+import { MyContext } from "@/shared/utils/types";
+import { UserCreateReq } from '@/modules/api/api.types';
+import { deletePrevMessage, handleBotError } from '@/shared/utils/helpers';
+import { COMMANDS, START_LANGUAGE_KEYBOARDS } from '@/shared/utils/consts';
 
 @Injectable()
 export class StartCommand implements ICommand {
+
+  constructor(private readonly apiService: ApiService) { }
 
   public async execute(ctx: MyContext): Promise<void> {
 
     try {
 
       await deletePrevMessage(ctx);
+
+      const data: UserCreateReq = {
+        telegramId: ctx.from.id,
+        name: ctx.from.first_name,
+        username: ctx.from?.username,
+      }
+
+      await this.apiService.createOrGetUser(data);
 
       await ctx.reply(this.getLanguageMessage(ctx), {
         reply_markup: this.startLanguageInlineKeyboards(),
@@ -20,11 +33,10 @@ export class StartCommand implements ICommand {
 
     } catch (error) {
 
-      console.log(error);
-      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+      return handleBotError(error, COMMANDS.START, ctx);
 
     }
-    
+
   }
 
   private getLanguageMessage(ctx: MyContext): string {
@@ -41,5 +53,6 @@ export class StartCommand implements ICommand {
     return new InlineKeyboard(keyboards);
 
   }
+
 
 }
