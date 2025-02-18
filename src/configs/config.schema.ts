@@ -15,5 +15,7 @@ export const configSchema = Joi.object({
     TELEGRAM_BOT_TOKEN: Joi.string(),
     TELEGRAM_WEB_APP_URL: Joi.string(),
 
+    ADMIN_EMAIL: Joi.string(),
+    ADMIN_PASSWORD: Joi.string(),
 
 }).options({ presence: "required" });

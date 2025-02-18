@@ -4,7 +4,7 @@ import { Conversation } from '@grammyjs/conversations';
 
 const adminId = 7134231329; // Define adminId
 
-export async function sendContentConversation(conversation: Conversation<MyContext>, ctx: MyContext) {
+export async function sendContentConversation(conversation: Conversation<MyContext>, ctx: MyContext, userService: UserHttpService): Promise<void> {
 
     try {
 
@@ -19,7 +19,7 @@ export async function sendContentConversation(conversation: Conversation<MyConte
 
         // Send the received message to all users
 
-        const users = [1549244915, 968954832]
+        const users = await userService.getAllUsers();
 
         for (const user of users) {
             try {

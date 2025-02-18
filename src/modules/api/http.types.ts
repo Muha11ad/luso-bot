@@ -27,3 +27,25 @@ export interface UserType {
   username: string;
   telegram_id: number;
 }
+
+export interface LoginReq {
+  email: string;
+  password: string;
+}
+
+export interface LoginRes {
+  access: string;
+  refresh: string;
+}
+
+export interface UserGetAllReq {
+  token: string;
+}
+
+export enum ERROR_CODES {
+  expiredToken = 100,
+}
+
+export interface RefreshReq {
+  refresh: string;
+}

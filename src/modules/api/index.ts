@@ -1,3 +1,3 @@
-export { ApiModule } from './api.module';
+export { ApiModule } from './http.module';
 
 export { ApiService } from './api.service';

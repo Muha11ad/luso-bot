@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ICallback } from '../../callback.interface';
 import { IProduct, MyContext } from '@/shared/utils/types';
-import { RecommendationCreateClientReq } from '@/modules/api/api.types';
+import { RecommendationCreateClientReq } from '@/modules/api/http.types';
 import { addThousandSeparator, deletePrevMessage, handleBotError } from '@/shared/utils/helpers';
 
 

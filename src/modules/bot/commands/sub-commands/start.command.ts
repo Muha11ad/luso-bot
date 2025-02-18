@@ -3,7 +3,7 @@ import { ApiService } from '@/modules/api';
 import { Injectable } from '@nestjs/common';
 import { ICommand } from '../command.interface';
 import { MyContext } from "@/shared/utils/types";
-import { UserCreateReq } from '@/modules/api/api.types';
+import { UserCreateReq } from '@/modules/api/http.types';
 import { deletePrevMessage, handleBotError } from '@/shared/utils/helpers';
 import { COMMANDS, START_LANGUAGE_KEYBOARDS } from '@/shared/utils/consts';
 

@@ -9,7 +9,10 @@ export const COMMANDS = {
 }
 
 export const ENDPOINTS = {
+    LOGIN: 'admin/user/login',
+    REFRESH: 'admin/user/refresh',
     CREAET_USER: 'landing/user',
+    GET_ALL_USERS: 'admin/user/all',
     RECOMMENDATION: 'landing/product/filter',
 };
 
@@ -59,4 +62,9 @@ export const CALLBACK = {
 export const CONVERSATIONS = {
     sendContent: 'sendContentConversation',
     confirm_order: 'confirmOrderConversation',
+}
+
+export const REDIS_KEYS = {
+    access: 'access',
+    refresh: 'refresh',
 }

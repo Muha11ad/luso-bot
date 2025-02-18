@@ -4,10 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { IProduct } from '@/shared/utils/types';
 import { ENDPOINTS } from '@/shared/utils/consts';
 import { handleApiError } from '@/shared/utils/helpers';
-import { RecommendationCreateClientReq, ResponseType, UserCreateReq, UserType } from './api.types';
+import { RecommendationCreateClientReq, ResponseType, UserCreateReq, UserType } from './http.types';
 
 @Injectable()
-export class ApiService {
+export class HttpService {
 
   private baseUrl: string;
   private apiClient: AxiosInstance;
@@ -42,21 +42,27 @@ export class ApiService {
 
   }
 
-  public async createOrGetUser(data: UserCreateReq): Promise<boolean> {
+  public async getData<T>(endpoint: string, token?: string): Promise<ResponseType<T>> {
 
     try {
 
-      const result = await this.postData<UserType, UserCreateReq>(ENDPOINTS.CREAET_USER, data);
-      return result.success;
+      const response = await this.apiClient.get<ResponseType<any>>(endpoint, {
+        headers: {
+          authorization: token,
+        },
+      });
+
+      return response.data;
 
     } catch (error) {
 
-      return error.response.data.success
+      return handleApiError(error, endpoint, 'GET');
 
     }
+
   }
 
-  private async postData<T, D = {}>(endpoint: string, data: D): Promise<ResponseType<T>> {
+  public async postData<T, D = {}>(endpoint: string, data: D): Promise<ResponseType<T>> {
 
     try {
 
