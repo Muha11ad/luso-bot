@@ -27,7 +27,7 @@ export class UserHttpService {
     }
   }
 
-  public async getAllUsers(data: UserGetAllReq): Promise<UserType[]> {
+  public async getAllUsers(): Promise<UserType[]> {
 
     try {
 

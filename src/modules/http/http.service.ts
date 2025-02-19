@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import axios, { AxiosInstance } from 'axios';
+import { ResponseType } from './http.types';
 import { ConfigService } from '@nestjs/config';
-import { IProduct } from '@/shared/utils/types';
-import { ENDPOINTS } from '@/shared/utils/consts';
 import { handleApiError } from '@/shared/utils/helpers';
-import { RecommendationCreateClientReq, ResponseType, UserCreateReq, UserType } from './http.types';
 
 @Injectable()
 export class HttpService {
@@ -26,21 +24,6 @@ export class HttpService {
     });
   }
 
-  public async getRecommendedProducts(data: RecommendationCreateClientReq): Promise<ResponseType<IProduct[]>> {
-
-    try {
-
-      const result = await this.postData<IProduct[], RecommendationCreateClientReq>(ENDPOINTS.RECOMMENDATION, data);
-
-      return result;
-
-    } catch (error) {
-
-      return error.response.data;
-
-    }
-
-  }
 
   public async getData<T>(endpoint: string, token?: string): Promise<ResponseType<T>> {
 
@@ -62,11 +45,11 @@ export class HttpService {
 
   }
 
-  public async postData<T, D = {}>(endpoint: string, data: D): Promise<ResponseType<T>> {
+  public async postData<T, D = {}>(endpoint: string, data: D, token?: string): Promise<ResponseType<T>> {
 
     try {
 
-      const response = await this.apiClient.post<ResponseType<T>>(endpoint, data);
+      const response = await this.apiClient.post<ResponseType<T>>(endpoint, data, { headers: { authorization: token } });
       return response.data;
 
     } catch (error) {

@@ -1,16 +1,16 @@
-import { InlineKeyboard, Keyboard } from 'grammy';
-import { ApiService } from '@/modules/api';
-import { Injectable } from '@nestjs/common';
 import { ICommand } from '../command.interface';
 import { MyContext } from "@/shared/utils/types";
-import { UserCreateReq } from '@/modules/api/http.types';
+import { InlineKeyboard, Keyboard } from 'grammy';
+import { HttpServer, Injectable } from '@nestjs/common';
+import { UserCreateReq } from '@/modules/http/http.types';
 import { deletePrevMessage, handleBotError } from '@/shared/utils/helpers';
 import { COMMANDS, START_LANGUAGE_KEYBOARDS } from '@/shared/utils/consts';
+import { UserHttpService } from '@/modules/http/services/user.http.service';
 
 @Injectable()
 export class StartCommand implements ICommand {
 
-  constructor(private readonly apiService: ApiService) { }
+  constructor(private readonly userHttpServive: UserHttpService) { }
 
   public async execute(ctx: MyContext): Promise<void> {
 
@@ -24,7 +24,7 @@ export class StartCommand implements ICommand {
         username: ctx.from?.username,
       }
 
-      await this.apiService.createOrGetUser(data);
+      await this.userHttpServive.createOrGetUser(data);
 
       await ctx.reply(this.getLanguageMessage(ctx), {
         reply_markup: this.startLanguageInlineKeyboards(),

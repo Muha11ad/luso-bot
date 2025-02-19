@@ -1,112 +1,94 @@
-import { ApiService } from '@/modules/api';
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { ICallback } from '../../callback.interface';
-import { IProduct, MyContext } from '@/shared/utils/types';
-import { RecommendationCreateClientReq } from '@/modules/api/http.types';
-import { addThousandSeparator, deletePrevMessage, handleBotError } from '@/shared/utils/helpers';
-
-
+import { Injectable, } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { ICallback } from "../../callback.interface";
+import { IProduct, MyContext } from "@/shared/utils/types";
+import { addThousandSeparator, deletePrevMessage, handleBotError } from "@/shared/utils/helpers";
+import { RecommendationCreateClientReq, RecommendationSaveReq } from "@/modules/http/http.types";
+import { RecommenadionHttpService } from "@/modules/http/services/recommendation.http.service";
 
 @Injectable()
 export class PurposeCallback implements ICallback {
 
-  constructor(
-    private readonly apiService: ApiService,
-    private readonly configService: ConfigService,
-  ) { }
+    constructor(
+        private readonly configService: ConfigService,
+        private readonly recommendationHttpService: RecommenadionHttpService,
+    ) { }
 
-  public async handle(ctx: MyContext): Promise<void> {
 
-    try {
+    public async handle(ctx: MyContext): Promise<void> {
 
-      await deletePrevMessage(ctx);
+        try {
 
-      const callbackQuery = ctx.callbackQuery;
-      const purpose = callbackQuery.data.split('_')[1];
+            const callbackQuery = ctx.callbackQuery;
+            const purpose = callbackQuery.data.split('_')[1];
+            ctx.session.rec = { ...ctx.session.rec, purpose };
 
-      ctx.session.rec = { ...ctx.session.rec, purpose };
+            await deletePrevMessage(ctx);
 
-      if (!ctx.session.rec.age && !ctx.session.rec.purpose && !ctx.session.rec.skinType) {
+            const data: RecommendationCreateClientReq = {
+                age: ctx.session.rec.age,
+                skinType: ctx.session.rec.skinType,
+                purpose,
+            }
+            const recommendation = await this.recommendationHttpService.getRecommendedProducts(data);
 
-        await ctx.reply(ctx.t('recommendation_error'));
+            if (!recommendation.success) {
+                await ctx.reply(ctx.t('server_error'));
+                return;
+            }
 
-      }
 
-      const data: RecommendationCreateClientReq = {
-        age: ctx.session.rec.age,
-        skinType: ctx.session.rec.skinType,
-        purpose: ctx.session.rec.purpose,
-      }
+            if (recommendation.data.length === 0) {
 
-      console.log(data);
+                await ctx.reply(ctx.t('no_recommended_products'));
+                return;
 
-      const response = await this.apiService.getRecommendedProducts(data);
+            }
 
-      if (!response.success) {
+            const productIds = recommendation.data.map(product => product.id);
+            const usersData: RecommendationSaveReq = {
+                purpose,
+                userId: ctx.from.id,
+                products: productIds,
+            };
 
-        await ctx.reply(ctx.t('server_error'));
-        return
+            await this.recommendationHttpService.saveRecommendation(usersData);
 
-      }
+            await this.renderProducts(ctx, recommendation.data);
 
-      if (response.data.length === 0) {
+        } catch (error) {
 
-        await ctx.reply(ctx.t('no_recommended_products'));
-        return;
+            return handleBotError(error, PurposeCallback.name, ctx);
 
-      }
-
-      await this.renderProducts(ctx, response.data);
-
-    } catch (error) {
-
-      return handleBotError(error, PurposeCallback.name, ctx);
+        }
 
     }
 
-  }
+    private async renderProducts(ctx: MyContext, products: IProduct[]): Promise<void> {
+        const webAppUrl = this.configService.get<string>('tg.webApp');
 
-  private async renderProducts(ctx: MyContext, products: IProduct[]) {
+        for (const product of products) {
+            const caption = this.getCaption(product, ctx);
 
-    const webAppUrl = this.configService.get('tg.webApp');
-
-    for (const product of products) {
-
-      if (product?.Images && product.Images.length > 0) {
-
-        await ctx.replyWithPhoto(product?.Images[0]?.imageUrl, {
-          caption: this.getCaption(product, ctx),
-          parse_mode: 'HTML',
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: 'See full product',
-                  url: webAppUrl,
-                },
-              ],
-            ],
-          },
-        });
-
-      } else {
-
-        await ctx.reply(this.getCaption(product, ctx), {
-          parse_mode: 'HTML',
-        });
-
-      }
+            if (product?.Images?.length > 0) {
+                await ctx.replyWithPhoto(product.Images[0].imageUrl, {
+                    caption,
+                    parse_mode: 'HTML',
+                    reply_markup: {
+                        inline_keyboard: [[{ text: 'See full product', url: webAppUrl }]],
+                    },
+                });
+            } else {
+                await ctx.reply(caption, { parse_mode: 'HTML' });
+            }
+        }
     }
 
-  }
-
-  private getCaption(product: IProduct, ctx: MyContext): string {
-
-    return `
-    <b>${ctx.t('name')}</b> ${product.name}\n<b>${ctx.t('price')}</b> ${addThousandSeparator(product.price)}\n<b>${ctx.t('description')}</b> ${product?.Characteristic?.purpose?.ru}\n<u>${ctx.t('find_product')}</u>
-    `;
-
-  }
-
+    private getCaption(product: IProduct, ctx: MyContext): string {
+        return `
+        <b>${ctx.t('name')}</b> ${product.name}\n<b>${ctx.t('price')}</b> ${addThousandSeparator(product.price)}\n<b>${ctx.t('description')}</b> ${product?.Characteristic?.purpose?.ru}\n<u>${ctx.t('find_product')}</u>
+        `;
+    }
 }
+
+

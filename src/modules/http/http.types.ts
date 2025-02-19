@@ -49,3 +49,9 @@ export enum ERROR_CODES {
 export interface RefreshReq {
   refresh: string;
 }
+
+export interface RecommendationSaveReq {
+  userId: number;
+  purpose: string;
+  products: string[];
+}

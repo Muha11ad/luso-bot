@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MyContext } from '@/shared/utils/types';
 import { ICallback } from '../callback.interface';
-import { handleBotError } from '@/shared/utils/helpers';
+import { deletePrevMessage, handleBotError } from '@/shared/utils/helpers';
 
 @Injectable()
 export class LanguageCallback implements ICallback {
@@ -16,10 +16,7 @@ export class LanguageCallback implements ICallback {
       ctx.session.__language_code = language;
 
       await ctx.answerCallbackQuery(`Language set to ${language}`);
-
-      if (callbackQuery.message) {
-        await ctx.api.deleteMessage(callbackQuery.message.chat.id, callbackQuery.message.message_id);
-      }
+      await deletePrevMessage(ctx);
 
     } catch (error) {
 

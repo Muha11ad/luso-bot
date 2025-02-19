@@ -1,35 +1,40 @@
 import { Module } from '@nestjs/common';
-import { ApiModule } from '@/modules/api';
 import { BotService } from './bot.service';
-import { ConfigModule } from '@nestjs/config';
-import { CacheModule } from '@nestjs/cache-manager';
+import { HttpModule } from '../http/http.module';
 import { AppCommand } from './commands/sub-commands/app.command';
-import { SendContentCommand } from './commands/admin-commands/sendContent.command';
+import { ConversationService } from './conversation/conversation.service';
 import { AgeCallback } from './callback/sub-callbacks/recommendation/age.callback';
+import { SendContentCommand } from './commands/admin-commands/sendContent.command';
+import { OrderConversation } from './conversation/sub-conversaions/order.conversation';
 import { PurposeCallback } from './callback/sub-callbacks/recommendation/purpose.callback';
 import { SkinTypeCallback } from './callback/sub-callbacks/recommendation/skinType.callback';
+import { SendContentConversation } from './conversation/sub-conversaions/sendContent.conversation';
 import { HelpCommand, StartCommand, LanguageCommand, CommandsService, RecommendationCommand } from './commands';
 import { CallbacksService, CancelOrderCallback, ConfirmOrderCallback, LanguageCallback, StartLanguageCallback } from './callback';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), CacheModule.register(), ApiModule],
+  imports: [HttpModule],
   providers: [
     AppCommand,
     BotService,
-    HelpCommand,
     AgeCallback,
+    HelpCommand,
     StartCommand,
-    PurposeCallback,
     LanguageCommand,
+    PurposeCallback,
     CommandsService,
     CallbacksService,
-    LanguageCallback,
     SkinTypeCallback,
+    LanguageCallback,
+    OrderConversation,
     SendContentCommand,
     CancelOrderCallback,
+    ConversationService,
     ConfirmOrderCallback,
     StartLanguageCallback,
     RecommendationCommand,
+    SendContentConversation,
+
   ],
 })
 export class BotModule { }

@@ -5,10 +5,10 @@ import { MyContext } from '@/shared/utils/types';
 import { LanguageCallback } from './sub-callbacks/language.callback';
 import { StartLanguageCallback } from './sub-callbacks/start.callback';
 import { AgeCallback } from './sub-callbacks/recommendation/age.callback';
-import { PurposeCallback } from './sub-callbacks/recommendation/purpose.callback';
 import { CancelOrderCallback } from './sub-callbacks/order/cancel-order.callback';
 import { ConfirmOrderCallback } from './sub-callbacks/order/confirm-order.callback';
 import { SkinTypeCallback } from './sub-callbacks/recommendation/skinType.callback';
+import { PurposeCallback } from './sub-callbacks/recommendation/purpose.callback';
 
 @Injectable()
 export class CallbacksService {

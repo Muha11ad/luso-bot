@@ -9,11 +9,12 @@ export const COMMANDS = {
 }
 
 export const ENDPOINTS = {
-    LOGIN: 'admin/user/login',
-    REFRESH: 'admin/user/refresh',
+    LOGIN: 'admin/auth/login',
     CREAET_USER: 'landing/user',
+    REFRESH: 'admin/auth/refresh',
     GET_ALL_USERS: 'admin/user/all',
-    RECOMMENDATION: 'landing/product/filter',
+    RECOMMENDATION_SAVE: 'admin/recommendation',
+    RECOMMENDATION_GET: 'landing/product/filter',
 };
 
 export const LANGUAGE_KEYBOARDS = [
@@ -55,13 +56,14 @@ export const CALLBACK = {
     LANGUAGE: ['lang_uz', 'lang_ru', 'lang_en'],
     START: ['start_uz', 'start_ru', 'start_en'],
     AGE: AGES_WITH_CALLBACK.map((value) => value.callback_data),
-    SKIN_TYPE: SKIN_TYPES_WITH_CALLBACK.map((value) => value.callback_data),
     PURPOSE: PURPOSES_WITH_CALLBACK.map((value) => value.callback_data),
+    SKIN_TYPE: SKIN_TYPES_WITH_CALLBACK.map((value) => value.callback_data),
 };
 
 export const CONVERSATIONS = {
     sendContent: 'sendContentConversation',
     confirm_order: 'confirmOrderConversation',
+    recommendation: 'recommendationConversation',
 }
 
 export const REDIS_KEYS = {

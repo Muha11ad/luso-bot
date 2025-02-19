@@ -12,36 +12,29 @@ export class SkinTypeCallback implements ICallback {
 
         try {
 
-            await deletePrevMessage(ctx);
-
             const callbackQuery = ctx.callbackQuery;
             const skinType = callbackQuery.data.split('_')[1];
 
             ctx.session.rec = { ...ctx.session.rec, skinType };
 
+            await deletePrevMessage(ctx);
 
-            await ctx.reply(ctx.t('select_skin_type'), {
-                reply_markup: this.getPurposeKeyboard(ctx),
-            });
+            await ctx.reply(ctx.t('select_purpose'), { reply_markup: this.getPurposeKeyboard(ctx) });
 
         } catch (error) {
 
             return handleBotError(error, SkinTypeCallback.name, ctx);
 
         }
-
     }
 
     private getPurposeKeyboard(ctx: MyContext) {
 
         const keyboard = new InlineKeyboard();
-
         PURPOSES_WITH_CALLBACK.forEach(({ text, callback_data }) => {
             keyboard.text(ctx.t(text), callback_data);
         });
-
         return keyboard;
 
     }
-
 }
