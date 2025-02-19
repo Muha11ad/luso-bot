@@ -41,9 +41,10 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
       this.bot.use(i18n.middleware());
       this.bot.use(conversations());
 
+      this.conversationService.registerConversations(this.bot);
+      
       this.commandsService.registerCommands(this.bot);
       this.callbacksService.registerCallbacks(this.bot);
-      this.conversationService.registerConversations(this.bot);
 
       // fixxx
       this.bot.catch((err: MyBotError) => {

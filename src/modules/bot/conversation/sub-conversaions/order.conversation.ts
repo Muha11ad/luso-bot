@@ -27,7 +27,7 @@ export class OrderConversation implements IConversation {
 
         } catch (error) {
 
-            return handleBotError(error, CONVERSATIONS.confirm_order, ctx);
+            return handleBotError(error, CONVERSATIONS.order, ctx);
 
         }
 

@@ -10,22 +10,21 @@ import { UserHttpService } from "@/modules/http/services/user.http.service";
 @Injectable()
 export class SendContentConversation implements IConversation {
 
-    private adminId: string;
+    private adminId: number;
 
     constructor(
         private readonly configService: ConfigService,
         private readonly userHttpService: UserHttpService,
     ) {
-
-        this.adminId = this.configService.get('tg.adminId');
-
+        const adminId = this.configService.get('tg.adminId')
+        this.adminId = Number(adminId);
     }
 
     public async handle(conversation: Conversation<MyContext>, ctx: MyContext) {
 
         try {
 
-            if (ctx.message.from.id !== Number(this.adminId)) {
+            if (ctx.message.from.id !== this.adminId) {
 
                 await ctx.reply('Saloomaat 🫡');
                 return;
@@ -36,8 +35,7 @@ export class SendContentConversation implements IConversation {
 
             const result = await conversation.waitFor('message');
 
-            const users = await this.userHttpService.getAllUsers();
-
+            const users = await this.userHttpService.getAllUsers();            
             for (const user of users) {
 
                 try {

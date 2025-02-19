@@ -12,48 +12,34 @@ export class UserHttpService {
     private readonly authService: AuthHttpService,
   ) { }
 
-
   public async createOrGetUser(data: UserCreateReq): Promise<boolean> {
-
     try {
-
       const result = await this.httpService.postData<UserType, UserCreateReq>(ENDPOINTS.CREAET_USER, data);
       return result.success;
-
-    } catch (error) {
-
-      return error.response.data.success
-
+    } catch (error: any) {
+      return error.response?.data?.success ?? false;
     }
   }
 
   public async getAllUsers(): Promise<UserType[]> {
-
     try {
-
       const token = await this.authService.getAccessToken();
+      let result = await this.httpService.getData<UserType[]>(ENDPOINTS.GET_ALL_USERS, token);
 
-      const result = await this.httpService.getData<UserType[]>(ENDPOINTS.GET_ALL_USERS, token);
-
-      if (result.error.errId === ERROR_CODES.expiredToken) {
-
+      if (!result.success && result.error?.errId === ERROR_CODES.expiredToken) {
         const newToken = await this.authService.refreshToken();
-        const res = await this.httpService.getData<UserType[]>(ENDPOINTS.GET_ALL_USERS, newToken);
-
-        if (res.success) {
-
-          return res.data;
-
-        }
-
+        result = await this.httpService.getData<UserType[]>(ENDPOINTS.GET_ALL_USERS, newToken);
       }
 
-    } catch (error) {
+      if (!result.success) {
+        handleApiError(result.error, ENDPOINTS.GET_ALL_USERS, 'GET');
+        return [];
+      }
 
-      return handleApiError(error, ENDPOINTS.GET_ALL_USERS, 'GET');
-
+      return result.data;
+    } catch (error: any) {
+      handleApiError(error, ENDPOINTS.GET_ALL_USERS, 'GET');
+      return [];
     }
-
   }
-
 }

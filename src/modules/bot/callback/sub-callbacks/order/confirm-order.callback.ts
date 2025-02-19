@@ -17,7 +17,7 @@ export class ConfirmOrderCallback implements ICallback {
       await ctx.reply(this.getMessage(ctx), {
         parse_mode: 'HTML',
       });
-      await ctx.conversation.enter(CONVERSATIONS.confirm_order);
+      await ctx.conversation.enter(CONVERSATIONS.order);
 
     } catch (error) {
 

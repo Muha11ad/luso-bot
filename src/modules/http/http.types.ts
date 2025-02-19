@@ -43,7 +43,7 @@ export interface UserGetAllReq {
 }
 
 export enum ERROR_CODES {
-  expiredToken = 100,
+  expiredToken = 105,
 }
 
 export interface RefreshReq {

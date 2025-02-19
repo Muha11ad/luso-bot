@@ -61,9 +61,8 @@ export const CALLBACK = {
 };
 
 export const CONVERSATIONS = {
+    order: 'confirmOrderConversation',
     sendContent: 'sendContentConversation',
-    confirm_order: 'confirmOrderConversation',
-    recommendation: 'recommendationConversation',
 }
 
 export const REDIS_KEYS = {
