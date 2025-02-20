@@ -16,53 +16,36 @@ export class SendContentConversation implements IConversation {
         private readonly configService: ConfigService,
         private readonly userHttpService: UserHttpService,
     ) {
-        const adminId = this.configService.get('tg.adminId')
-        this.adminId = Number(adminId);
+        this.adminId = Number(this.configService.get('tg.adminId'));
     }
 
     public async handle(conversation: Conversation<MyContext>, ctx: MyContext) {
-
         try {
-
             if (ctx.message.from.id !== this.adminId) {
-
                 await ctx.reply('Saloomaat 🫡');
                 return;
-
             }
 
-            await ctx.reply('Hello narsa tasha, boshqalaga yuborama 🫠');
+            await ctx.reply('Send a message (text, image, poll, etc.), and I will send it to all users.');
 
+            // Wait for the admin's message
             const result = await conversation.waitFor('message');
+            const messageId = result.message.message_id; // Get message ID
 
-            const users = await this.userHttpService.getAllUsers();            
+            const users = await this.userHttpService.getAllUsers();
+
             for (const user of users) {
-
                 try {
-
-                    await ctx.api.forwardMessage(user.telegram_id, this.adminId, result.msgId);
-
+                    // Copy the message (removes "Forwarded from" label)
+                    await ctx.api.copyMessage(user.telegram_id, this.adminId, messageId);
                 } catch (error) {
-
-                    console.error(`Failed to send message to ${user}:`, error);
-
+                    console.error(`Failed to send message to ${user.telegram_id}:`, error);
                 }
             }
 
-            await ctx.reply('Xabar barchaga yetkazildi 🫡');
-            return
-
+            await ctx.reply('Message has been sent to all users 🫡');
         } catch (error) {
-
             return handleBotError(error, CONVERSATIONS.sendContent, ctx);
-
         }
-
     }
-
 }
-
-
-
-
-
