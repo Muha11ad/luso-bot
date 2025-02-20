@@ -3,9 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { HttpService } from '../http.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { ADMIN_CONFIG } from '@/configs/admin.config';
 import { handleApiError } from '@/shared/utils/helpers';
-import { ENDPOINTS, REDIS_KEYS } from '@/shared/utils/consts';
 import { LoginReq, LoginRes, RefreshReq } from '../http.types';
+import { ENDPOINTS, REDIS_KEYS } from '@/shared/utils/consts';
 
 @Injectable()
 export class AuthHttpService {
@@ -47,13 +48,17 @@ export class AuthHttpService {
       const res = await this.httpService.postData<LoginRes, RefreshReq>(ENDPOINTS.REFRESH, { refresh: refreshToken })
 
       if (res.success) {
+
         await this.StoreToken()
         const token = await this.cacheManager.get<string>(REDIS_KEYS.access)
         return token
+      
       } else {
+      
         await this.cacheManager.del(REDIS_KEYS.access)
         await this.cacheManager.del(REDIS_KEYS.refresh)
         return ''
+      
       }
 
     } catch (error) {
@@ -88,8 +93,8 @@ export class AuthHttpService {
 
     try {
 
-      const email = this.configService.get("ADMIN_EMAIL")
-      const password = this.configService.get("ADMIN_PASSWORD")
+      const email = this.configService.get(ADMIN_CONFIG.email)
+      const password = this.configService.get(ADMIN_CONFIG.password)
 
       const data: LoginReq = {
         email,

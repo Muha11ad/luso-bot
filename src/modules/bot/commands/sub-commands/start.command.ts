@@ -19,7 +19,7 @@ export class StartCommand implements ICommand {
       await deletePrevMessage(ctx);
 
       const data: UserCreateReq = {
-        telegramId: ctx.from.id,
+        telegramId: String(ctx.from.id),
         name: ctx.from.first_name,
         username: ctx.from?.username,
       }

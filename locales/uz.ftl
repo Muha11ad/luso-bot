@@ -5,9 +5,7 @@ welcome_third_message = 🌟 Tavsiyalarimizni tekshiring
 welcome_second_message = 🛠️ Bizning mini ilovamizni sinab ko'ring  
 welcome_fourth_message = 😊 Xatolar yoki noto'g'ri ma'lumotlarni topsangiz, bizga xabar bering.
 
-
-help_second_message = Biz bilan bog'laning! @luso_admin
-help_message = Agar buyurtma bilan bog'liq savol yoki muammo bo'lsa
+help_message = 📞Biz bilan bog'laning, agar:, ❌ Ilova yoki bot bilan muammo bo'lsa, 📦 Mahsulot bilan bog‘liq muammo bo‘lsa, 🛒 Buyurtma bilan bog‘liq muammo bo‘lsa, 💡Bizni yaxshilash uchun g‘oyalaringiz bo‘lsa
 
 name = Nomi : 
 price = Narxi : 
@@ -38,3 +36,5 @@ send_only_image = Toʻlovni tasdiqlash uchun faqat rasmni yuboring.
 conversation_end = Joylashuv olindi, biz tez orada sizga qaytamiz. Rahmat!
 
 server_error = Server bilan bog'liq muammolarimiz bor, iltimos admin bilan bog'laning va keyinroq qayta urinib ko'ring😶‍🌫️
+
+welcome_mini_app = 👉 Tugmani bosing va: , 🛍️✨ Mahsulotlarimizni ko‘rib chiqing, 📂 Kategoriyalarni o‘rganing, 🔍 Keraklisini toping, 🛒✅ Buyurtma bering!

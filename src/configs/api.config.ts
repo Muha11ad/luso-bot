@@ -6,3 +6,8 @@ export default registerAs("api", () => ({
     origin: process.env.API_ORIGIN,
     
 }));
+
+export const API_CONFIG = {
+    baseUrl: 'api.baseUrl',
+    origin: 'api.origin',
+}

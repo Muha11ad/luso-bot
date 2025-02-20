@@ -1,13 +1,14 @@
-import { MyContext } from '@/shared/utils/types';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { TG_CONFIG } from '@/configs/tg.config';
+import { MyContext } from '@/shared/utils/types';
 import { ICallback } from '../../callback.interface';
-import { deletePrevMessage } from '@/shared/utils/helpers';
+import { deletePrevMessage, handleBotError } from '@/shared/utils/helpers';
 
 @Injectable()
 export class CancelOrderCallback implements ICallback {
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly configService: ConfigService) { }
 
   public async handle(ctx: MyContext): Promise<void> {
 
@@ -17,14 +18,13 @@ export class CancelOrderCallback implements ICallback {
 
       await ctx.answerCallbackQuery({ text: ctx.t('order_canceled') });
 
-      await ctx.api.sendMessage(this.configService.get('ADMIN_TELEGRAM_ID'), this.getMessage(ctx), {
+      await ctx.api.sendMessage(this.configService.get(TG_CONFIG.adminId), this.getMessage(ctx), {
         parse_mode: 'HTML',
       });
 
     } catch (error) {
 
-      console.error('Error handling cancel order callback:', error);
-      await ctx.answerCallbackQuery({ text: ctx.t('server_error') });
+      return handleBotError(error, CancelOrderCallback.name, ctx);
 
     }
 

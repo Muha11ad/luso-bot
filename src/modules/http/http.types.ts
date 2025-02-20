@@ -13,7 +13,7 @@ export type ErrorResponseType = {
 export interface UserCreateReq {
   name: string;
   username?: string;
-  telegramId: number;
+  telegramId: string;
 }
 
 export interface RecommendationCreateClientReq {
@@ -51,7 +51,7 @@ export interface RefreshReq {
 }
 
 export interface RecommendationSaveReq {
-  userId: number;
+  userId: string;
   purpose: string;
   products: string[];
 }

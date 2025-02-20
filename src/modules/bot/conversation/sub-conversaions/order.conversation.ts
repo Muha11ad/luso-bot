@@ -1,8 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { MyContext } from "@/shared/utils/types";
-import { Conversation } from "@grammyjs/conversations";
+import { TG_CONFIG } from "@/configs/tg.config";
 import { CONVERSATIONS } from "@/shared/utils/consts";
+import { Conversation } from "@grammyjs/conversations";
 import { handleBotError } from "@/shared/utils/helpers";
 import { IConversation } from "../conversation.interface";
 
@@ -13,7 +14,7 @@ export class OrderConversation implements IConversation {
 
     constructor(private readonly config: ConfigService) {
 
-        this.adminId = this.config.get('tg.adminId');
+        this.adminId = this.config.get(TG_CONFIG.adminId);
 
     }
 

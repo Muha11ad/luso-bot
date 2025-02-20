@@ -5,8 +5,8 @@ welcome_second_message =  🛠️ Try our mini app
 welcome_third_message =  🌟 Check out our recommendations
 welcome_fourth_message = 😊 Please inform us if you encounter any bugs or misinformation. 
 
-help_second_message = Contact us ! @luso_admin
-help_message = If you any question or problem with order 
+help_message = 📞 Contact us @luso_admin if:, 🛒 Problem with an order, 💡 Any ideas to improve us,📦 Have an issue with a product, ❌ Faced a problem with the app or bot
+  
 
 name = Name : 
 price = Price : 
@@ -37,3 +37,5 @@ send_only_location = Send your actual location.
 send_only_image = Send only image to confirm your payment.
 
 server_error = We have some problems with server, please contact admin and try again later😶‍🌫️
+
+welcome_mini_app = 👉 Click to: ,🛍️✨ Browse our products, 📂 Check categories, 🔍 Find what you need, 🛒✅ Place an order!

@@ -3,9 +3,9 @@ import { Bot, session } from 'grammy';
 import { CommandsService } from './commands';
 import { CallbacksService } from './callback';
 import { ConfigService } from '@nestjs/config';
+import { ConversationService } from './conversation';
 import { conversations } from '@grammyjs/conversations';
 import { CustomLogger } from '@/shared/logger/custom.logger';
-import { ConversationService } from './conversation/conversation.service';
 import { MyBotError, MyContext, SessionData } from '@/shared/utils/types';
 import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
 

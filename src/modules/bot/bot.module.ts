@@ -1,38 +1,38 @@
+import { HttpModule } from '../http';
 import { Module } from '@nestjs/common';
 import { BotService } from './bot.service';
-import { HttpModule } from '../http/http.module';
-import { AppCommand } from './commands/sub-commands/app.command';
-import { ConversationService } from './conversation/conversation.service';
-import { AgeCallback } from './callback/sub-callbacks/recommendation/age.callback';
-import { SendContentCommand } from './commands/admin-commands/sendContent.command';
-import { OrderConversation } from './conversation/sub-conversaions/order.conversation';
-import { PurposeCallback } from './callback/sub-callbacks/recommendation/purpose.callback';
-import { SkinTypeCallback } from './callback/sub-callbacks/recommendation/skinType.callback';
-import { SendContentConversation } from './conversation/sub-conversaions/sendContent.conversation';
-import { HelpCommand, StartCommand, LanguageCommand, CommandsService, RecommendationCommand } from './commands';
+import { CommandsService } from './commands';
+import { ConversationService } from './conversation';
+import { SendContentCommand } from './commands/admin-commands';
+import { OrderConversation, SendContentConversation } from './conversation/sub-conversaions';
+import { AgeCallback, PurposeCallback, SkinTypeCallback } from './callback/sub-callbacks/recommendation';
+import { AppCommand, HelpCommand, LanguageCommand, RecommendationCommand, StartCommand } from './commands/sub-commands';
 import { CallbacksService, CancelOrderCallback, ConfirmOrderCallback, LanguageCallback, StartLanguageCallback } from './callback';
 
 @Module({
   imports: [HttpModule],
   providers: [
-    AppCommand,
     BotService,
-    AgeCallback,
+
+    AppCommand,
     HelpCommand,
     StartCommand,
-    PurposeCallback,
-    LanguageCommand,
     CommandsService,
-    CallbacksService,
+    LanguageCommand,
+    SendContentCommand,
+    RecommendationCommand,
+
+    AgeCallback,
+    PurposeCallback,
     SkinTypeCallback,
     LanguageCallback,
-    OrderConversation,
-    SendContentCommand,
     CancelOrderCallback,
-    ConversationService,
     ConfirmOrderCallback,
     StartLanguageCallback,
-    RecommendationCommand,
+
+    CallbacksService,
+    OrderConversation,
+    ConversationService,
     SendContentConversation,
 
   ],

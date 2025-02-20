@@ -63,3 +63,7 @@ export async function handleBotError(error: any, command: string, ctx: MyContext
 
   }
 }
+
+export function formatMessage(message: string): string {
+  return message.replaceAll(',', "\n");
+}

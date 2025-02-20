@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { MyContext } from '@/shared/utils/types';
 import { ICallback } from '../../callback.interface';
 import { CONVERSATIONS } from '@/shared/utils/consts';
+import { ADMIN_CONFIG } from '@/configs/admin.config';
 
 @Injectable()
 export class ConfirmOrderCallback implements ICallback {
@@ -45,7 +46,8 @@ export class ConfirmOrderCallback implements ICallback {
 
   private getMessage(ctx: MyContext): string {
 
-    const cartDetails = this.configService.get('CART_DETAILS');
+    const cartDetails = this.configService.get(ADMIN_CONFIG.cartDetails);
+    
     return `<b>${ctx.t('pay_order')}:</b>\n${cartDetails}`;
 
   }

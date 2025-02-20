@@ -1,10 +1,11 @@
 import { Injectable, } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { TG_CONFIG } from "@/configs/tg.config";
 import { ICallback } from "../../callback.interface";
 import { IProduct, MyContext } from "@/shared/utils/types";
+import { RecommenadionHttpService } from "@/modules/http/services/recommendation.http.service";
 import { addThousandSeparator, deletePrevMessage, handleBotError } from "@/shared/utils/helpers";
 import { RecommendationCreateClientReq, RecommendationSaveReq } from "@/modules/http/http.types";
-import { RecommenadionHttpService } from "@/modules/http/services/recommendation.http.service";
 
 @Injectable()
 export class PurposeCallback implements ICallback {
@@ -48,7 +49,7 @@ export class PurposeCallback implements ICallback {
             const productIds = recommendation.data.map(product => product.id);
             const usersData: RecommendationSaveReq = {
                 purpose,
-                userId: ctx.from.id,
+                userId: String(ctx.from.id),
                 products: productIds,
             };
 
@@ -65,12 +66,14 @@ export class PurposeCallback implements ICallback {
     }
 
     private async renderProducts(ctx: MyContext, products: IProduct[]): Promise<void> {
-        const webAppUrl = this.configService.get<string>('tg.webApp');
+
+        const webAppUrl = this.configService.get(TG_CONFIG.webApp);
 
         for (const product of products) {
             const caption = this.getCaption(product, ctx);
 
             if (product?.Images?.length > 0) {
+                
                 await ctx.replyWithPhoto(product.Images[0].imageUrl, {
                     caption,
                     parse_mode: 'HTML',
@@ -78,8 +81,11 @@ export class PurposeCallback implements ICallback {
                         inline_keyboard: [[{ text: 'See full product', url: webAppUrl }]],
                     },
                 });
+            
             } else {
+            
                 await ctx.reply(caption, { parse_mode: 'HTML' });
+            
             }
         }
     }
