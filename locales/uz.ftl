@@ -38,3 +38,11 @@ conversation_end = Joylashuv olindi, biz tez orada sizga qaytamiz. Rahmat!
 server_error = Server bilan bog'liq muammolarimiz bor, iltimos admin bilan bog'laning va keyinroq qayta urinib ko'ring😶‍🌫️
 
 welcome_mini_app = 👉 Tugmani bosing va: , 🛍️✨ Mahsulotlarimizni ko‘rib chiqing, 📂 Kategoriyalarni o‘rganing, 🔍 Keraklisini toping, 🛒✅ Buyurtma bering!
+
+
+Acne = Akne
+Anti-Aging = Qarishga qarshi 
+Brightening = Yorqinlik beruvchi
+Hydrating = Namlantiruvchi
+Pore-Care = Teshikchalar parvarishi
+Whitening = Oqartiruvchi   

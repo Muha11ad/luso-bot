@@ -1,9 +1,10 @@
-import { InlineKeyboard } from 'grammy';
+import { InlineKeyboard, InputFile } from 'grammy';
 import { Injectable } from '@nestjs/common';
 import { MyContext } from '@/shared/utils/types';
 import { ICallback } from '../../callback.interface';
 import { SKIN_TYPES_WITH_CALLBACK } from '@/shared/utils/consts';
 import { deletePrevMessage, handleBotError } from '@/shared/utils/helpers';
+import * as path from 'path';
 
 @Injectable()
 export class AgeCallback implements ICallback {
@@ -20,8 +21,10 @@ export class AgeCallback implements ICallback {
       const age = callbackQuery.data.split('_')[1];
       ctx.session.rec = { ...ctx.session.rec, age };
 
-
-      await ctx.reply(ctx.t('select_skin_type'), {
+      const imagePath = path.resolve(__dirname, "../../../../../../public/skin-types.jpg");
+      
+      await ctx.replyWithPhoto(new InputFile(imagePath), {
+        caption: ctx.t('select_skin_type'),
         reply_markup: this.getSkinTypeKeyboard(ctx),
       });
 

@@ -39,3 +39,10 @@ send_only_image = Send only image to confirm your payment.
 server_error = We have some problems with server, please contact admin and try again later😶‍🌫️
 
 welcome_mini_app = 👉 Click to: ,🛍️✨ Browse our products, 📂 Check categories, 🔍 Find what you need, 🛒✅ Place an order!
+
+Acne = Acne
+Anti-Aging = Anti-Aging
+Brightening = Brightening
+Hydrating = Hydrating
+Pore-Care = Pore-Care
+Whitening = Whitening

@@ -51,7 +51,9 @@ export interface RefreshReq {
 }
 
 export interface RecommendationSaveReq {
+  age: string;
   userId: string;
   purpose: string;
+  skin_type: string;
   products: string[];
 }

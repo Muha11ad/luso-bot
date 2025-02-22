@@ -43,7 +43,7 @@ export const SKIN_TYPES_WITH_CALLBACK = SKIN_TYPES.map((skinType) => ({
     callback_data: `skin_${skinType}`,
 }));
 
-export const PURPOSES = ['Acne', 'Anti-Aging', 'Brightening', 'Hydrating', 'Pore Care', 'Whitening'];
+export const PURPOSES = ['Acne', 'Anti-Aging', 'Brightening', 'Hydrating', 'Pore-Care', 'Whitening'];
 
 export const PURPOSES_WITH_CALLBACK = PURPOSES.map((purpose) => ({
     text: purpose,

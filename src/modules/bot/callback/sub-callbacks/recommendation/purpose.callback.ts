@@ -31,7 +31,12 @@ export class PurposeCallback implements ICallback {
                 skinType: ctx.session.rec.skinType,
                 purpose,
             }
+            console.log(data);
+
             const recommendation = await this.recommendationHttpService.getRecommendedProducts(data);
+
+            console.log(recommendation);
+
 
             if (!recommendation.success) {
                 await ctx.reply(ctx.t('server_error'));
@@ -39,23 +44,28 @@ export class PurposeCallback implements ICallback {
             }
 
 
-            if (recommendation.data.length === 0) {
+            if (recommendation?.data?.length === 0) {
 
                 await ctx.reply(ctx.t('no_recommended_products'));
-                return;
 
             }
 
-            const productIds = recommendation.data.map(product => product.id);
+            else if (recommendation?.data?.length > 0) {
+
+                await this.renderProducts(ctx, recommendation.data);
+
+            }
+
             const usersData: RecommendationSaveReq = {
                 purpose,
+                age: ctx.session.rec.age,
                 userId: String(ctx.from.id),
-                products: productIds,
+                skin_type: ctx.session.rec.skinType,
+                products: recommendation?.data.map((product) => product.id) || [],
             };
 
             await this.recommendationHttpService.saveRecommendation(usersData);
-
-            await this.renderProducts(ctx, recommendation.data);
+            return;
 
         } catch (error) {
 
@@ -73,26 +83,31 @@ export class PurposeCallback implements ICallback {
             const caption = this.getCaption(product, ctx);
 
             if (product?.Images?.length > 0) {
-                
+
                 await ctx.replyWithPhoto(product.Images[0].imageUrl, {
                     caption,
                     parse_mode: 'HTML',
                     reply_markup: {
-                        inline_keyboard: [[{ text: 'See full product', url: webAppUrl }]],
+                        inline_keyboard: [[{ text: 'See full product', url: `${webAppUrl}/product/${product.id}` }]],
                     },
                 });
-            
+
             } else {
-            
-                await ctx.reply(caption, { parse_mode: 'HTML' });
-            
+
+                await ctx.reply(caption, {
+                    parse_mode: 'HTML',
+                    reply_markup: {
+                        inline_keyboard: [[{ text: 'See full product', url: `${webAppUrl}/product/${product.id}` }]],
+                    },
+                });
+
             }
         }
     }
 
     private getCaption(product: IProduct, ctx: MyContext): string {
         return `
-        <b>${ctx.t('name')}</b> ${product.name}\n<b>${ctx.t('price')}</b> ${addThousandSeparator(product.price)}\n<b>${ctx.t('description')}</b> ${product?.Characteristic?.purpose?.ru}\n<u>${ctx.t('find_product')}</u>
+        <b>${ctx.t('name')}</b> ${product.name}\n<b>${ctx.t('price')}</b> ${addThousandSeparator(product.price)}\n<b>${ctx.t('description')}</b>${product?.Characteristic?.purpose?.ru}
         `;
     }
 }
