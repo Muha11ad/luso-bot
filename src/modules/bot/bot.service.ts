@@ -42,7 +42,7 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
       this.bot.use(conversations());
 
       this.conversationService.registerConversations(this.bot);
-      
+
       this.commandsService.registerCommands(this.bot);
       this.callbacksService.registerCallbacks(this.bot);
 
@@ -80,7 +80,7 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
   async onModuleDestroy() {
 
     this.bot.stop();
-    this.logger.log('Bot stopped');
+    console.log('Bot stopped');
 
   }
 }

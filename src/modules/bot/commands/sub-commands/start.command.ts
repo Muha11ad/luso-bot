@@ -15,7 +15,7 @@ export class StartCommand implements ICommand {
   public async execute(ctx: MyContext): Promise<void> {
 
     try {
-
+      
       await deletePrevMessage(ctx);
 
       const data: UserCreateReq = {

@@ -15,11 +15,8 @@ export class PurposeCallback implements ICallback {
         private readonly recommendationHttpService: RecommenadionHttpService,
     ) { }
 
-
     public async handle(ctx: MyContext): Promise<void> {
-
         try {
-
             const callbackQuery = ctx.callbackQuery;
             const purpose = callbackQuery.data.split('_')[1];
             ctx.session.rec = { ...ctx.session.rec, purpose };
@@ -31,29 +28,18 @@ export class PurposeCallback implements ICallback {
                 skinType: ctx.session.rec.skinType,
                 purpose,
             }
-            console.log(data);
 
             const recommendation = await this.recommendationHttpService.getRecommendedProducts(data);
-
-            console.log(recommendation);
-
 
             if (!recommendation.success) {
                 await ctx.reply(ctx.t('server_error'));
                 return;
             }
 
-
             if (recommendation?.data?.length === 0) {
-
                 await ctx.reply(ctx.t('no_recommended_products'));
-
-            }
-
-            else if (recommendation?.data?.length > 0) {
-
+            } else if (recommendation?.data?.length > 0) {
                 await this.renderProducts(ctx, recommendation.data);
-
             }
 
             const usersData: RecommendationSaveReq = {
@@ -66,50 +52,42 @@ export class PurposeCallback implements ICallback {
 
             await this.recommendationHttpService.saveRecommendation(usersData);
             return;
-
         } catch (error) {
-
             return handleBotError(error, PurposeCallback.name, ctx);
-
         }
-
     }
 
     private async renderProducts(ctx: MyContext, products: IProduct[]): Promise<void> {
-
         const webAppUrl = this.configService.get(TG_CONFIG.webApp);
 
         for (const product of products) {
             const caption = this.getCaption(product, ctx);
 
             if (product?.Images?.length > 0) {
-
                 await ctx.replyWithPhoto(product.Images[0].imageUrl, {
                     caption,
                     parse_mode: 'HTML',
                     reply_markup: {
-                        inline_keyboard: [[{ text: 'See full product', url: `${webAppUrl}/product/${product.id}` }]],
+                        inline_keyboard: [[{ text: 'See full product', url: webAppUrl }]],
                     },
                 });
-
             } else {
-
                 await ctx.reply(caption, {
                     parse_mode: 'HTML',
                     reply_markup: {
-                        inline_keyboard: [[{ text: 'See full product', url: `${webAppUrl}/product/${product.id}` }]],
+                        inline_keyboard: [[{ text: 'See full product', url: webAppUrl }]],
                     },
                 });
-
             }
         }
     }
 
     private getCaption(product: IProduct, ctx: MyContext): string {
+        const locale = ctx.i18n.locale();
+        const purposeTranslation = product?.Characteristic?.purpose?.[locale] || '';
+
         return `
-        <b>${ctx.t('name')}</b> ${product.name}\n<b>${ctx.t('price')}</b> ${addThousandSeparator(product.price)}\n<b>${ctx.t('description')}</b>${product?.Characteristic?.purpose?.ru}
+        <b>${ctx.t('name')}</b> ${product.name}\n<b>${ctx.t('price')}</b> ${addThousandSeparator(product.price)}\n<b>${ctx.t('description')}</b>${purposeTranslation}
         `;
     }
 }
-
-
