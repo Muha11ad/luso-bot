@@ -83,8 +83,10 @@ export class PurposeCallback implements ICallback {
     }
 
     private getCaption(product: IProduct, ctx: MyContext): string {
-        const locale = ctx.i18n.locale();
-        const purposeTranslation = product?.Characteristic?.purpose?.[locale] || '';
+
+        const lang = ctx.session?.__language_code || 'en';
+
+        const purposeTranslation = product?.Characteristic?.purpose?.[lang];
 
         return `
         <b>${ctx.t('name')}</b> ${product.name}\n<b>${ctx.t('price')}</b> ${addThousandSeparator(product.price)}\n<b>${ctx.t('description')}</b>${purposeTranslation}
