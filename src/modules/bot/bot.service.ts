@@ -35,8 +35,17 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
           step: '',
           __language_code: undefined,
         }),
+        getSessionKey: (ctx) => {
+          // Try to get session key from chat ID, else use user ID
+          return ctx.chat?.id?.toString() || ctx.from?.id?.toString() || null;
+        },
       }),
       );
+
+      this.bot.use(async (ctx, next) => {
+        console.log('Received update type:', ctx.update);
+        await next();
+      });
 
       this.bot.use(i18n.middleware());
       this.bot.use(conversations());
