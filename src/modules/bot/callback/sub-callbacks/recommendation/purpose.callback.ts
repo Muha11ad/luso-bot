@@ -1,11 +1,11 @@
 import { Injectable, } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { TG_CONFIG } from "@/configs/tg.config";
+import { MyContext } from "@/shared/utils/types";
 import { ICallback } from "../../callback.interface";
-import { IProduct, MyContext } from "@/shared/utils/types";
+import { RecommendationCreateReq } from "@/modules/http/http.types";
+import { deletePrevMessage, handleBotError } from "@/shared/utils/helpers";
 import { RecommenadionHttpService } from "@/modules/http/services/recommendation.http.service";
-import { addThousandSeparator, deletePrevMessage, handleBotError } from "@/shared/utils/helpers";
-import { RecommendationCreateClientReq, RecommendationSaveReq } from "@/modules/http/http.types";
 
 @Injectable()
 export class PurposeCallback implements ICallback {
@@ -16,80 +16,63 @@ export class PurposeCallback implements ICallback {
     ) { }
 
     public async handle(ctx: MyContext): Promise<void> {
+
         try {
+
             const callbackQuery = ctx.callbackQuery;
             const purpose = callbackQuery.data.split('_')[1];
             ctx.session.rec = { ...ctx.session.rec, purpose };
 
             await deletePrevMessage(ctx);
 
-            const data: RecommendationCreateClientReq = {
-                age: ctx.session.rec.age,
-                skinType: ctx.session.rec.skinType,
-                purpose,
-            }
-
-            const recommendation = await this.recommendationHttpService.getRecommendedProducts(data);
-
-            if (!recommendation.success) {
-                await ctx.reply(ctx.t('server_error'));
-                return;
-            }
-
-            if (recommendation?.data?.length === 0) {
-                await ctx.reply(ctx.t('no_recommended_products'));
-            } else if (recommendation?.data?.length > 0) {
-                await this.renderProducts(ctx, recommendation.data);
-            }
-
-            const usersData: RecommendationSaveReq = {
+            const data: RecommendationCreateReq = {
                 purpose,
                 age: ctx.session.rec.age,
                 userId: String(ctx.from.id),
-                skin_type: ctx.session.rec.skinType,
-                products: recommendation?.data.map((product) => product.id) || [],
-            };
+                skinType: ctx.session.rec.skinType,
+                userLang: await this.formatLanguage(ctx),
+            }
 
-            await this.recommendationHttpService.saveRecommendation(usersData);
+            const recommendation = await this.recommendationHttpService.generate(data);
+
+            if (!recommendation.success) {
+
+                await ctx.reply(ctx.t('server_error'));
+                return;
+
+            }
+
+            const webAppUrl = this.configService.get(TG_CONFIG.webApp)
+
+            await ctx.reply(recommendation.data, {
+                parse_mode: 'HTML',
+                reply_markup: {
+                    inline_keyboard: [[{ text: ctx.t('see_products'), url: webAppUrl }]],
+                },
+            })
+
             return;
+            
         } catch (error) {
             return handleBotError(error, PurposeCallback.name, ctx);
         }
     }
 
-    private async renderProducts(ctx: MyContext, products: IProduct[]): Promise<void> {
-        const webAppUrl = this.configService.get(TG_CONFIG.webApp);
+    private async formatLanguage(ctx: MyContext): Promise<string> {
 
-        for (const product of products) {
-            const caption = this.getCaption(product, ctx);
+        const userLang = ctx.session.__language_code;
 
-            if (product?.Images?.length > 0) {
-                await ctx.replyWithPhoto(product.Images[0].imageUrl, {
-                    caption,
-                    parse_mode: 'HTML',
-                    reply_markup: {
-                        inline_keyboard: [[{ text: 'See full product', url: webAppUrl }]],
-                    },
-                });
-            } else {
-                await ctx.reply(caption, {
-                    parse_mode: 'HTML',
-                    reply_markup: {
-                        inline_keyboard: [[{ text: 'See full product', url: webAppUrl }]],
-                    },
-                });
-            }
+        switch (userLang) {
+            case 'ru':
+                return 'Russian';
+            case 'uz':
+                return 'Uzbek tilida';
+            case 'en':
+                return 'English';
+            default:
+                return 'English';
         }
+
     }
 
-    private getCaption(product: IProduct, ctx: MyContext): string {
-
-        const lang = ctx.session?.__language_code || 'en';
-
-        const purposeTranslation = product?.Characteristic?.purpose?.[lang];
-
-        return `
-        <b>${ctx.t('name')}</b> ${product.name}\n<b>${ctx.t('price')}</b> ${addThousandSeparator(product.price)}\n<b>${ctx.t('description')}</b>${purposeTranslation}
-        `;
-    }
 }

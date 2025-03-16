@@ -18,10 +18,9 @@ order_confirmed = Your order has been canceled
 pay_order = After paying to this card, please send screenshot
 
 no_recommended_products = No recommended products found 😥
-recommendation_third_message = 💖 Stay tuned for updates!
 recommendation_error = Something went wrong. Please try again 😥.
-recommendation_second_message = 🚀 We’re continuously improving it to enhance your experience even further!
-recommendation_message = ✨ This feature and data were developed in collaboration with professional cosmetologists.
+recommendation_second_message = 🔎 I'm here to help you find the best skincare solutions!
+recommendation_message = 🤖 Hello! I'm your AI skincare assistant.
 
 select_age = Now, please select your age : 
 select_skin_type = Choose your skin type :
@@ -46,3 +45,5 @@ Brightening = Brightening
 Hydrating = Hydrating
 Pore-Care = Pore-Care
 Whitening = Whitening
+
+see_products = More about products 

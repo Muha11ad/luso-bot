@@ -42,12 +42,6 @@ export class BotService implements OnModuleInit, OnModuleDestroy {
       }),
       );
 
-      this.bot.use(async (ctx, next) => {
-        console.log('Received update type:', ctx.update);
-        console.log('Received update type:', ctx.update.message.chat);
-        await next();
-      });
-
       this.bot.use(i18n.middleware());
       this.bot.use(conversations());
 

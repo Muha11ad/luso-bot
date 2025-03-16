@@ -4,7 +4,7 @@ import { IProduct } from '@/shared/utils/types';
 import { ENDPOINTS } from '@/shared/utils/consts';
 import { AuthHttpService } from './auth.http.service';
 import { handleApiError } from '@/shared/utils/helpers';
-import { ERROR_CODES, RecommendationCreateClientReq, RecommendationSaveReq, ResponseType } from '../http.types';
+import { ERROR_CODES, RecommendationCreateReq, ResponseType } from '../http.types';
 
 @Injectable()
 export class RecommenadionHttpService {
@@ -14,35 +14,18 @@ export class RecommenadionHttpService {
     ) { }
 
 
-    public async getRecommendedProducts(data: RecommendationCreateClientReq): Promise<ResponseType<IProduct[]>> {
-
-        try {
-
-            const result = await this.httpService.postData<IProduct[], RecommendationCreateClientReq>(ENDPOINTS.RECOMMENDATION_GET, data);
-
-            return result;
-
-        } catch (error) {
-
-            handleApiError(error, RecommenadionHttpService.name, 'saveRecommendation');
-            return error.response.data;
-
-        }
-
-    }
-
-    public async saveRecommendation(data: RecommendationSaveReq): Promise<ResponseType<boolean>> {
+    public async generate(data: RecommendationCreateReq): Promise<ResponseType<string>> {
 
         try {
 
             const token = await this.authService.getAccessToken();
 
-            const result = await this.httpService.postData<boolean, RecommendationSaveReq>(ENDPOINTS.RECOMMENDATION_SAVE, data, token);
+            const result = await this.httpService.postData<string, RecommendationCreateReq>(ENDPOINTS.RECOMMENDATION_GENERATE, data, token);
 
             if (result.error.errId === ERROR_CODES.expiredToken) {
 
                 const newToken = await this.authService.refreshToken();
-                const result = await this.httpService.postData<boolean, RecommendationSaveReq>(ENDPOINTS.RECOMMENDATION_SAVE, data, newToken);
+                const result = await this.httpService.postData<string, RecommendationCreateReq>(ENDPOINTS.RECOMMENDATION_GENERATE, data, newToken);
 
                 if (result.success) {
 
@@ -54,7 +37,8 @@ export class RecommenadionHttpService {
 
         } catch (error) {
 
-            handleApiError(error, RecommenadionHttpService.name, 'saveRecommendation');
+            handleApiError(error, RecommenadionHttpService.name, this.generate.name);
+
             return error.response.data;
 
         }

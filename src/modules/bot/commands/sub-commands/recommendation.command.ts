@@ -29,7 +29,7 @@ export class RecommendationCommand implements ICommand {
   private getRecommendationMessage(ctx: MyContext) {
 
     return `
-  *${ctx.t('recommendation_message')}* \n*${ctx.t('recommendation_second_message')}* \n*${ctx.t('recommendation_third_message')}* \n${ctx.t('select_age')}
+  *${ctx.t('recommendation_message')}* \n*${ctx.t('recommendation_second_message')}* \n${ctx.t('select_age')}
   
     `;
 

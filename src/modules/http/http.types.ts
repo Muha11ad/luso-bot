@@ -16,10 +16,12 @@ export interface UserCreateReq {
   telegramId: string;
 }
 
-export interface RecommendationCreateClientReq {
+export interface RecommendationCreateReq {
   age: string;
+  userId: string;
   purpose: string;
   skinType: string;
+  userLang: string;
 }
 
 export interface UserType {
@@ -48,12 +50,4 @@ export enum ERROR_CODES {
 
 export interface RefreshReq {
   refresh: string;
-}
-
-export interface RecommendationSaveReq {
-  age: string;
-  userId: string;
-  purpose: string;
-  skin_type: string;
-  products: string[];
 }

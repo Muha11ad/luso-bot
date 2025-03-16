@@ -29,12 +29,13 @@ export class SkinTypeCallback implements ICallback {
     }
 
     private getPurposeKeyboard(ctx: MyContext) {
-
         const keyboard = new InlineKeyboard();
-        PURPOSES_WITH_CALLBACK.forEach(({ text, callback_data }) => {
+        PURPOSES_WITH_CALLBACK.forEach(({ text, callback_data }, index) => {
             keyboard.text(ctx.t(text), callback_data);
+            if ((index + 1) % 3 === 0) {
+                keyboard.row(); // Move to the next row after every 3 buttons
+            }
         });
         return keyboard;
-
     }
 }

@@ -16,11 +16,10 @@ order_canceled = Sizning buyurmangiz bekor qilindi
 pay_order = Ushbu kartaga toʻlov qilgandan soʻng, skrinshot yuboring
 
 
-recommendation_third_message = 💖 Yangilanishlarni kuzatib boring!
 no_recommended_products = Tavsiya etilgan mahsulotlar topilmadi 😥
 recommendation_error = Kutilmagan xatolik ketdi. Iltimos, qayta urinib ko‘ring 😥.
-recommendation_message = ✨ Ushbu xususiyat va ma'lumotlar professional kosmetologlar bilan hamkorlikda ishlab chiqilgan.
-recommendation_second_message = 🚀 Biz uni doimiy ravishda yaxshilab, sizning tajribangizni yanada mukammal qilishga harakat qilmoqdamiz!
+recommendation_message = 🤖 Salom! Men sizning AI teri parvarishi yordamchingizman
+recommendation_second_message = 🔎 Sizga eng yaxshi parvarish usullarini topishda yordam beraman!
 
 select_age = Endi yoshingizni tanlang : 
 select_skin_type = Yuzingiz teri turini tanlang
@@ -46,3 +45,5 @@ Brightening = Yorqinlik beruvchi
 Hydrating = Namlantiruvchi
 Pore-Care = Teshikchalar parvarishi
 Whitening = Oqartiruvchi   
+
+see_products = Mahsulotlar haqida ko'proq 

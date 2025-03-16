@@ -13,8 +13,7 @@ export const ENDPOINTS = {
     CREAET_USER: 'landing/user',
     REFRESH: 'admin/auth/refresh',
     GET_ALL_USERS: 'admin/user/all',
-    RECOMMENDATION_SAVE: 'admin/recommendation',
-    RECOMMENDATION_GET: 'landing/product/filter',
+    RECOMMENDATION_GENERATE: 'admin/recommendation/generate',
 };
 
 export const LANGUAGE_KEYBOARDS = [
