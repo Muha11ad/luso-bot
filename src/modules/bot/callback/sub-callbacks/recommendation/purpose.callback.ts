@@ -34,7 +34,7 @@ export class PurposeCallback implements ICallback {
             }
 
             const recommendation = await this.recommendationHttpService.generate(data);
-
+            
             if (!recommendation.success) {
 
                 await ctx.reply(ctx.t('server_error'));

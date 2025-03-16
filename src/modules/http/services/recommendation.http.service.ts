@@ -21,7 +21,9 @@ export class RecommenadionHttpService {
             const token = await this.authService.getAccessToken();
 
             const result = await this.httpService.postData<string, RecommendationCreateReq>(ENDPOINTS.RECOMMENDATION_GENERATE, data, token);
-
+            
+            console.log(result);
+            
             if (result.error.errId === ERROR_CODES.expiredToken) {
 
                 const newToken = await this.authService.refreshToken();
@@ -34,6 +36,7 @@ export class RecommenadionHttpService {
                 }
 
             }
+            return result;
 
         } catch (error) {
 

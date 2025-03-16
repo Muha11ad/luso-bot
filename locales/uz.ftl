@@ -47,3 +47,5 @@ Pore-Care = Teshikchalar parvarishi
 Whitening = Oqartiruvchi   
 
 see_products = Mahsulotlar haqida ko'proq 
+
+rec_error = Biz ushbu funksiyani faol ishlab chiqmoqdamiz! Tez orada AI teri parvarishi assistenti foydalanishga topshiriladi. Tayyor bo‘lishi bilan sizni xabardor qilamiz! 💖✨
