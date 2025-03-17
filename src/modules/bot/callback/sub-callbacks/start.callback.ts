@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { MyContext } from '@/shared/utils/types';
 import { ICallback } from '../callback.interface';
 import { deletePrevMessage, handleBotError } from '@/shared/utils/helpers';
 
 @Injectable()
 export class StartLanguageCallback implements ICallback {
+
+  constructor(private readonly configService: ConfigService){}
 
   public async handle(ctx: MyContext): Promise<void> {
 
@@ -17,8 +20,20 @@ export class StartLanguageCallback implements ICallback {
       await ctx.answerCallbackQuery(`Language set to ${language}`);
       await deletePrevMessage(ctx);
 
+      const webAppUrl = this.configService.get<string>('tg.webApp');
+
       await ctx.reply(this.getWelcomeMessage(ctx), {
         parse_mode: 'Markdown',
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: ctx.t('open_mini_app'),
+                url: webAppUrl,
+              },
+            ],
+          ],
+        },
       });
 
     } catch (error) {

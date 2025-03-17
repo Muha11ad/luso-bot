@@ -48,4 +48,6 @@ Whitening = Oqartiruvchi
 
 see_products = Mahsulotlar haqida ko'proq 
 
+open_mini_app = Mahsulotlarni👆 ko'rish uchun bosing
+
 rec_error = Biz ushbu funksiyani faol ishlab chiqmoqdamiz! Tez orada AI teri parvarishi assistenti foydalanishga topshiriladi. Tayyor bo‘lishi bilan sizni xabardor qilamiz! 💖✨

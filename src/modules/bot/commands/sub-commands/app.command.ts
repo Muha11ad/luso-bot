@@ -23,7 +23,7 @@ export class AppCommand implements ICommand {
                     inline_keyboard: [
                         [
                             {
-                                text: 'Open Mini App',
+                                text: ctx.t('open_mini_app'),
                                 url: webAppUrl,
                             },
                         ],

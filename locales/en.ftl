@@ -48,4 +48,6 @@ Whitening = Whitening
 
 see_products = More about products 
 
+open_mini_app = Click👆 to explore products
+
 rec_error = We are actively working on this feature! Our AI skincare assistant will be available soon. We will notify you as soon as it’s ready! 💖✨
