@@ -35,6 +35,7 @@ export class AuthHttpService {
   public async refreshToken(): Promise<string> {
 
     try {
+      
       const refreshToken = await this.cacheManager.get<string>(REDIS_KEYS.refresh)
 
       if (!refreshToken) {
@@ -75,8 +76,8 @@ export class AuthHttpService {
 
       const token = await this.authorize()
 
-      await this.cacheManager.set(REDIS_KEYS.access, token.access,)
-      await this.cacheManager.set(REDIS_KEYS.refresh, token.refresh,)
+      await this.cacheManager.set(REDIS_KEYS.access, token.access)
+      await this.cacheManager.set(REDIS_KEYS.refresh, token.refresh)
 
     } catch (error) {
 

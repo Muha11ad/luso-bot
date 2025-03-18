@@ -3,6 +3,7 @@ import axios, { AxiosInstance } from 'axios';
 import { ResponseType } from './http.types';
 import { ConfigService } from '@nestjs/config';
 import { handleApiError } from '@/shared/utils/helpers';
+import { API_CONFIG } from '@/configs/api.config';
 
 @Injectable()
 export class HttpService {
@@ -11,13 +12,14 @@ export class HttpService {
   private apiClient: AxiosInstance;
 
   constructor(private readonly config: ConfigService) {
+
     this.baseUrl = this.config.get<string>('api.baseUrl');
     this.apiClient = axios.create({
       baseURL: this.baseUrl,
       headers: {
         'Content-Type': 'application/json',
         options: {
-          origin: this.config.get<string>('api.origin'),
+          origin: this.config.get<string>(API_CONFIG.origin),
         },
       },
       withCredentials: true,
@@ -50,6 +52,7 @@ export class HttpService {
     try {
 
       const response = await this.apiClient.post<ResponseType<T>>(endpoint, data, { headers: { authorization: token } });
+
       return response.data;
 
     } catch (error) {

@@ -23,18 +23,18 @@ export class PurposeCallback implements ICallback {
             const purpose = callbackQuery.data.split('_')[1];
             ctx.session.rec = { ...ctx.session.rec, purpose };
 
-            await deletePrevMessage(ctx);
+            deletePrevMessage(ctx);
 
             const data: RecommendationCreateReq = {
                 purpose,
                 age: ctx.session.rec.age,
                 userId: String(ctx.from.id),
                 skinType: ctx.session.rec.skinType,
-                userLang: await this.formatLanguage(ctx),
+                userLang: this.formatLanguage(ctx),
             }
 
             const recommendation = await this.recommendationHttpService.generate(data);
-            
+
             if (!recommendation.success) {
 
                 await ctx.reply(ctx.t('server_error'));
@@ -44,21 +44,20 @@ export class PurposeCallback implements ICallback {
 
             const webAppUrl = this.configService.get(TG_CONFIG.webApp)
 
-            await ctx.reply(recommendation.data, {
-                parse_mode: 'HTML',
+            await ctx.reply(recommendation?.data, {
+                parse_mode: 'MarkdownV2',
                 reply_markup: {
                     inline_keyboard: [[{ text: ctx.t('see_products'), url: webAppUrl }]],
                 },
             })
-
-            return;
             
+
         } catch (error) {
             return handleBotError(error, PurposeCallback.name, ctx);
         }
     }
 
-    private async formatLanguage(ctx: MyContext): Promise<string> {
+    private formatLanguage(ctx: MyContext): string {
 
         const userLang = ctx.session.__language_code;
 

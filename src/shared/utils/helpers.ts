@@ -45,7 +45,7 @@ export function handleApiError(error: any, endpoint: string, method: string) {
 
   logger.error(`Failed to call ${method} ${endpoint}:`, error.response.data.error);
 
-  return error.response.data;
+  return error?.response?.data;
 
 }
 
