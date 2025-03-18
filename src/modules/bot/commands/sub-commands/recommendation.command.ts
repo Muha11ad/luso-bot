@@ -14,10 +14,12 @@ export class RecommendationCommand implements ICommand {
 
       await deletePrevMessage(ctx);
 
-      await ctx.reply(this.getRecommendationMessage(ctx), {
-        parse_mode: 'Markdown',
-        reply_markup: this.getAgeKeyboard(),
-      });
+      await ctx.reply(ctx.t('rec_error'))
+
+      // await ctx.reply(this.getRecommendationMessage(ctx), {
+      //   parse_mode: 'Markdown',
+      //   reply_markup: this.getAgeKeyboard(),
+      // });
 
     } catch (error) {
 
