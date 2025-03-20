@@ -45,12 +45,11 @@ export class PurposeCallback implements ICallback {
             const webAppUrl = this.configService.get(TG_CONFIG.webApp)
 
             await ctx.reply(recommendation?.data, {
-                parse_mode: 'MarkdownV2',
                 reply_markup: {
                     inline_keyboard: [[{ text: ctx.t('see_products'), url: webAppUrl }]],
                 },
             })
-            
+
 
         } catch (error) {
             return handleBotError(error, PurposeCallback.name, ctx);
