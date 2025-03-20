@@ -35,7 +35,7 @@ export const AGES_WITH_CALLBACK = AGES.map((age) => ({
     callback_data: `age_${age}`,
 }));
 
-export const SKIN_TYPES = ['Dry', 'Oily', 'Sensetive', 'Combination'];
+export const SKIN_TYPES = ['Dry', 'Oily', 'Sensetive', 'Combination', 'Normal'];
 
 export const SKIN_TYPES_WITH_CALLBACK = SKIN_TYPES.map((skinType) => ({
     text: skinType,

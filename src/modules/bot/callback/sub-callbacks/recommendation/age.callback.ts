@@ -1,10 +1,10 @@
-import { InlineKeyboard, InputFile } from 'grammy';
+import * as path from 'path';
 import { Injectable } from '@nestjs/common';
 import { MyContext } from '@/shared/utils/types';
+import { InlineKeyboard, InputFile } from 'grammy';
 import { ICallback } from '../../callback.interface';
 import { SKIN_TYPES_WITH_CALLBACK } from '@/shared/utils/consts';
 import { deletePrevMessage, handleBotError } from '@/shared/utils/helpers';
-import * as path from 'path';
 
 @Injectable()
 export class AgeCallback implements ICallback {
@@ -39,7 +39,7 @@ export class AgeCallback implements ICallback {
 
     const keyboard = new InlineKeyboard();
     SKIN_TYPES_WITH_CALLBACK.forEach(({ text, callback_data }) => {
-      keyboard.text(ctx.t(text), callback_data);
+      keyboard.text(ctx.t(text), callback_data).row()
     });
     return keyboard;
 

@@ -30,7 +30,7 @@ Dry = Dry
 Oily = Oily
 Combination = Combination (Dry & Oily)
 Sensetive = Sensitive (Allergic)
-
+Normal = Normal
 conversation_end = Location received we will back to you soon. Thank you!
 send_only_location = Send your actual location.
 send_only_image = Send only image to confirm your payment.

@@ -29,6 +29,7 @@ Dry = Quruq
 Oily = Yog'li
 Sensetive = Sezgir (Allergiyaga moyil)
 Combination = Kombinatsiya (Quruq & Yog'li)
+Normal = Nomal
 
 send_only_location = Joylashuvingizni yuboring.
 send_only_image = Toʻlovni tasdiqlash uchun faqat rasmni yuboring.
