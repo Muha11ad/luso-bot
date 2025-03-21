@@ -23,7 +23,7 @@ export class PurposeCallback implements ICallback {
             const purpose = callbackQuery.data.split('_')[1];
             ctx.session.rec = { ...ctx.session.rec, purpose };
 
-            await ctx.reply(ctx.t('generating_process'))
+            const sentMessage = await ctx.reply(ctx.t('generating_process'));
 
             deletePrevMessage(ctx);
 
@@ -46,7 +46,7 @@ export class PurposeCallback implements ICallback {
 
             const webAppUrl = this.configService.get(TG_CONFIG.webApp)
 
-            await ctx.editMessageText(recommendation?.data, {
+            await ctx.api.editMessageText(ctx.chat.id, sentMessage.message_id, recommendation?.data, {
                 reply_markup: {
                     inline_keyboard: [[{ text: ctx.t('see_products'), url: webAppUrl }]],
                 },
