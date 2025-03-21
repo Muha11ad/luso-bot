@@ -23,6 +23,8 @@ export class PurposeCallback implements ICallback {
             const purpose = callbackQuery.data.split('_')[1];
             ctx.session.rec = { ...ctx.session.rec, purpose };
 
+            await ctx.reply(ctx.t('generating_process'))
+
             deletePrevMessage(ctx);
 
             const data: RecommendationCreateReq = {
@@ -44,12 +46,11 @@ export class PurposeCallback implements ICallback {
 
             const webAppUrl = this.configService.get(TG_CONFIG.webApp)
 
-            await ctx.reply(recommendation?.data, {
+            await ctx.editMessageText(recommendation?.data, {
                 reply_markup: {
                     inline_keyboard: [[{ text: ctx.t('see_products'), url: webAppUrl }]],
                 },
             })
-
 
         } catch (error) {
             return handleBotError(error, PurposeCallback.name, ctx);
@@ -62,11 +63,11 @@ export class PurposeCallback implements ICallback {
 
         switch (userLang) {
             case 'ru':
-                return 'Russian';
+                return 'На Русском языке';
             case 'uz':
                 return 'Uzbek tilida';
             case 'en':
-                return 'English';
+                return 'In English';
             default:
                 return 'English';
         }
