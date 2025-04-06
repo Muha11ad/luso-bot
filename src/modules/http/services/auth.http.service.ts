@@ -1,20 +1,26 @@
 import { Cache } from 'cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '../http.service';
-import { Inject, Injectable } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ADMIN_CONFIG } from '@/configs/admin.config';
 import { handleApiError } from '@/shared/utils/helpers';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { LoginReq, LoginRes, RefreshReq } from '../http.types';
 import { ENDPOINTS, REDIS_KEYS } from '@/shared/utils/consts';
 
 @Injectable()
 export class AuthHttpService {
+
+  private readonly logger: Logger
+
   constructor(
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
-  ) { }
+  ) {
+
+    this.logger = new Logger(AuthHttpService.name)
+  }
 
   public async getAccessToken(): Promise<string> {
 
@@ -35,7 +41,7 @@ export class AuthHttpService {
   public async refreshToken(): Promise<string> {
 
     try {
-      
+
       const refreshToken = await this.cacheManager.get<string>(REDIS_KEYS.refresh)
 
       if (!refreshToken) {
@@ -46,20 +52,20 @@ export class AuthHttpService {
 
       }
 
-      const res = await this.httpService.postData<LoginRes, RefreshReq>(ENDPOINTS.REFRESH, { refresh: refreshToken })
+      const res = await this.httpService.postData<{ auth: LoginRes }, RefreshReq>(ENDPOINTS.REFRESH, { refresh: refreshToken })
 
       if (res.success) {
 
         await this.StoreToken()
         const token = await this.cacheManager.get<string>(REDIS_KEYS.access)
         return token
-      
+
       } else {
-      
+
         await this.cacheManager.del(REDIS_KEYS.access)
         await this.cacheManager.del(REDIS_KEYS.refresh)
         return ''
-      
+
       }
 
     } catch (error) {
@@ -84,7 +90,7 @@ export class AuthHttpService {
       await this.cacheManager.del(REDIS_KEYS.access)
       await this.cacheManager.del(REDIS_KEYS.refresh)
 
-      console.log('Error storing token', error)
+      this.logger.error('Error while storing token', error.message)
 
     }
 
@@ -102,9 +108,9 @@ export class AuthHttpService {
         password
       }
 
-      const res = await this.httpService.postData<LoginRes, LoginReq>(ENDPOINTS.LOGIN, data)
+      const res = await this.httpService.postData<{ auth: LoginRes }, LoginReq>(ENDPOINTS.LOGIN, data)
 
-      return res.data
+      return res.data.auth
 
     } catch (error) {
 

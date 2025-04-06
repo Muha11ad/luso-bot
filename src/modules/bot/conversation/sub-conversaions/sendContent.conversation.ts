@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { MyContext } from "@/shared/utils/types";
 import { CONVERSATIONS } from "@/shared/utils/consts";
@@ -11,12 +11,14 @@ import { UserHttpService } from "@/modules/http/services/user.http.service";
 export class SendContentConversation implements IConversation {
 
     private adminId: number;
+    private readonly logger: Logger
 
     constructor(
         private readonly configService: ConfigService,
         private readonly userHttpService: UserHttpService,
     ) {
         this.adminId = Number(this.configService.get('tg.adminId'));
+        this.logger = new Logger(SendContentConversation.name)
     }
 
     public async handle(conversation: Conversation<MyContext>, ctx: MyContext) {
@@ -35,17 +37,25 @@ export class SendContentConversation implements IConversation {
             const users = await this.userHttpService.getAllUsers();
 
             for (const user of users) {
+                
                 try {
                     // Copy the message (removes "Forwarded from" label)
                     await ctx.api.copyMessage(user.telegram_id, this.adminId, messageId);
+                
                 } catch (error) {
-                    console.error(`Failed to send message to ${user.telegram_id}:`, error);
+
+                    this.logger.error(`Failed to send message to user ${user.telegram_id}: ${error.message}`);
+                
                 }
+            
             }
 
             await ctx.reply('Message has been sent to all users 🫡');
+        
         } catch (error) {
+        
             return handleBotError(error, CONVERSATIONS.sendContent, ctx);
+        
         }
     }
 }

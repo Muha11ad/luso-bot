@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '../http.service';
 import { ENDPOINTS } from '@/shared/utils/consts';
-import { AuthHttpService } from './auth.http.service';
 import { handleApiError } from '@/shared/utils/helpers';
 import { RecommendationCreateReq, ResponseType } from '../http.types';
 
@@ -17,9 +16,9 @@ export class RecommenadionHttpService {
         try {
 
 
-            const result = await this.httpService.postData<string, RecommendationCreateReq>(ENDPOINTS.RECOMMENDATION_GENERATE, data);
+            const result = await this.httpService.postData<{ recommendations: string }, RecommendationCreateReq>(ENDPOINTS.RECOMMENDATION_GENERATE, data);
 
-            return result;
+            return {error: result.error, data: result.data?.recommendations || '', success: result.success};
 
         } catch (error) {
 

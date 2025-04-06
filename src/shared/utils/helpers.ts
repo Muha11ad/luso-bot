@@ -51,8 +51,10 @@ export function handleApiError(error: any, endpoint: string, method: string) {
 
 export async function handleBotError(error: any, command: string, ctx: MyContext,) {
 
-  console.log(`Failed to execute command ${command}:`, error);
+  const logger = new CustomLogger('Helpers');
 
+  logger.error(`Failed to execute command ${command}:`, error.message);
+  
   if (ctx?.callbackQuery) {
 
     await ctx.answerCallbackQuery({ text: ctx.t('server_error') });

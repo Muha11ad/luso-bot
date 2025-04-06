@@ -23,7 +23,6 @@ export class StartCommand implements ICommand {
         name: ctx.from.first_name,
         username: ctx.from?.username,
       }
-      console.log(data);
       
       await this.userHttpServive.createOrGetUser(data);
 
