@@ -68,3 +68,5 @@ export const REDIS_KEYS = {
     access: 'access',
     refresh: 'refresh',
 }
+
+export const MOCK_TELEGRAM_IDS = ["6864991736", "1549244915", "609888174", "7134231329", "968954832", '1055761281', '648172579', '1247573660', '1804812733','345449954']

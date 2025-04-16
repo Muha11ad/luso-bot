@@ -32,9 +32,12 @@ export class HttpService {
     try {
 
       const response = await this.apiClient.get<ResponseType<any>>(endpoint, {
+
         headers: {
+        
           authorization: token,
         },
+        
       });
 
       return response.data;

@@ -1,7 +1,7 @@
-import { Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { MyContext } from "@/shared/utils/types";
-import { CONVERSATIONS } from "@/shared/utils/consts";
+import { Injectable, Logger } from "@nestjs/common";
+import { CONVERSATIONS, MOCK_TELEGRAM_IDS } from "@/shared/utils/consts";
 import { Conversation } from "@grammyjs/conversations";
 import { handleBotError } from "@/shared/utils/helpers";
 import { IConversation } from "../conversation.interface";
@@ -9,16 +9,19 @@ import { UserHttpService } from "@/modules/http/services/user.http.service";
 
 @Injectable()
 export class SendContentConversation implements IConversation {
-
     private adminId: number;
-    private readonly logger: Logger
+    private readonly logger: Logger;
 
     constructor(
         private readonly configService: ConfigService,
         private readonly userHttpService: UserHttpService,
     ) {
         this.adminId = Number(this.configService.get('tg.adminId'));
-        this.logger = new Logger(SendContentConversation.name)
+        this.logger = new Logger(SendContentConversation.name);
+    }
+
+    private async delay(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     public async handle(conversation: Conversation<MyContext>, ctx: MyContext) {
@@ -30,32 +33,52 @@ export class SendContentConversation implements IConversation {
 
             await ctx.reply('Send a message (text, image, poll, etc.), and I will send it to all users.');
 
-            // Wait for the admin's message
             const result = await conversation.waitFor('message');
-            const messageId = result.message.message_id; // Get message ID
+            const messageId = result.message.message_id;
 
-            const users = await this.userHttpService.getAllUsers();
+            // const users = await this.userHttpService.getAllUsers();
+            const users = MOCK_TELEGRAM_IDS
+            const BATCH_SIZE = 30;
+            const DELAY_BETWEEN_BATCHES = 1000;
 
-            for (const user of users) {
-                
-                try {
-                    // Copy the message (removes "Forwarded from" label)
-                    await ctx.api.copyMessage(user.telegram_id, this.adminId, messageId);
-                
-                } catch (error) {
+            let successCount = 0;
+            let failCount = 0;
 
-                    this.logger.error(`Failed to send message to user ${user.telegram_id}: ${error.message}`);
+            for (let i = 0; i < users.length; i += BATCH_SIZE) {
+
+                const batch = users.slice(i, i + BATCH_SIZE);
+
+                await Promise.allSettled(
+
+                    batch.map(async (user) => {
+
+                        try {
+                        
+                            await ctx.api.copyMessage(user, this.adminId, messageId);
+                        
+                            successCount++;
+                        } catch (error) {
+                        
+                            failCount++;
+                            this.logger.error(`❌ Failed to send to ${user}: ${error.message}`);
+                        
+                        }
+                    
+                    })
                 
-                }
-            
+                );
+
+                await this.delay(DELAY_BETWEEN_BATCHES);
             }
 
-            await ctx.reply('Message has been sent to all users 🫡');
-        
+            await ctx.reply(`🟢 Message delivery completed!\n\n✅ Sent: ${successCount}\n❌ Failed: ${failCount}`);
+
         } catch (error) {
-        
+
             return handleBotError(error, CONVERSATIONS.sendContent, ctx);
         
         }
+    
     }
+
 }

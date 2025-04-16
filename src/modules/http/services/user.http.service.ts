@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '../http.service';
 import { ENDPOINTS } from '@/shared/utils/consts';
 import { AuthHttpService } from './auth.http.service';
+import { UserCreateReq, UserType } from '../http.types';
 import { handleApiError } from '@/shared/utils/helpers';
-import { ERROR_CODES, UserCreateReq, UserType } from '../http.types';
 
 @Injectable()
 export class UserHttpService {
@@ -33,13 +33,6 @@ export class UserHttpService {
     
       const token = await this.authService.getAccessToken();
       let result = await this.httpService.getData<{ users: UserType[] }>(ENDPOINTS.GET_ALL_USERS, token);
-
-      if (!result.success && result.error?.errId === ERROR_CODES.expiredToken) {
-    
-        const newToken = await this.authService.refreshToken();
-        result = await this.httpService.getData<{ users: UserType[] }>(ENDPOINTS.GET_ALL_USERS, newToken);
-    
-      }
 
       if (!result.success) {
 

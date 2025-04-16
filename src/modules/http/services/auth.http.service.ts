@@ -1,11 +1,11 @@
 import { Cache } from 'cache-manager';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '../http.service';
+import { LoginReq, LoginRes } from '../http.types';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { ADMIN_CONFIG } from '@/configs/admin.config';
 import { handleApiError } from '@/shared/utils/helpers';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { LoginReq, LoginRes, RefreshReq } from '../http.types';
 import { ENDPOINTS, REDIS_KEYS } from '@/shared/utils/consts';
 
 @Injectable()
@@ -24,12 +24,18 @@ export class AuthHttpService {
 
   public async getAccessToken(): Promise<string> {
 
+    // expired token will be deleted from cache with ttl
     const token = await this.cacheManager.get<string>(REDIS_KEYS.access)
 
+    // if token expired authorize again
     if (!token) {
 
-      await this.StoreToken()
+      const result = await this.authorize()
+      
+      await this.storeToken(result.access)
+
       const token = await this.cacheManager.get<string>(REDIS_KEYS.access)
+      
       return token
 
     }
@@ -38,57 +44,15 @@ export class AuthHttpService {
 
   }
 
-  public async refreshToken(): Promise<string> {
+  private async storeToken(access: string) {
 
     try {
 
-      const refreshToken = await this.cacheManager.get<string>(REDIS_KEYS.refresh)
-
-      if (!refreshToken) {
-
-        await this.StoreToken()
-        const token = await this.cacheManager.get<string>(REDIS_KEYS.access)
-        return token
-
-      }
-
-      const res = await this.httpService.postData<{ auth: LoginRes }, RefreshReq>(ENDPOINTS.REFRESH, { refresh: refreshToken })
-
-      if (res.success) {
-
-        await this.StoreToken()
-        const token = await this.cacheManager.get<string>(REDIS_KEYS.access)
-        return token
-
-      } else {
-
-        await this.cacheManager.del(REDIS_KEYS.access)
-        await this.cacheManager.del(REDIS_KEYS.refresh)
-        return ''
-
-      }
-
-    } catch (error) {
-
-      return handleApiError(error, ENDPOINTS.REFRESH, "POST")
-
-    }
-
-  }
-
-  private async StoreToken() {
-
-    try {
-
-      const token = await this.authorize()
-
-      await this.cacheManager.set(REDIS_KEYS.access, token.access)
-      await this.cacheManager.set(REDIS_KEYS.refresh, token.refresh)
+      await this.cacheManager.set(REDIS_KEYS.access, access, 60 * 60 * 23 )
 
     } catch (error) {
 
       await this.cacheManager.del(REDIS_KEYS.access)
-      await this.cacheManager.del(REDIS_KEYS.refresh)
 
       this.logger.error('Error while storing token', error.message)
 
