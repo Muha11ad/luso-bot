@@ -1,7 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 import { MyContext } from "@/shared/utils/types";
 import { Injectable, Logger } from "@nestjs/common";
-import { CONVERSATIONS, MOCK_TELEGRAM_IDS } from "@/shared/utils/consts";
+import { CONVERSATIONS } from "@/shared/utils/consts";
 import { Conversation } from "@grammyjs/conversations";
 import { handleBotError } from "@/shared/utils/helpers";
 import { IConversation } from "../conversation.interface";
@@ -36,8 +36,8 @@ export class SendContentConversation implements IConversation {
             const result = await conversation.waitFor('message');
             const messageId = result.message.message_id;
 
-            // const users = await this.userHttpService.getAllUsers();
-            const users = MOCK_TELEGRAM_IDS
+            const users = await this.userHttpService.getAllUsers();
+
             const BATCH_SIZE = 30;
             const DELAY_BETWEEN_BATCHES = 1000;
 
@@ -54,13 +54,13 @@ export class SendContentConversation implements IConversation {
 
                         try {
                         
-                            await ctx.api.copyMessage(user, this.adminId, messageId);
+                            await ctx.api.copyMessage(user.telegram_id, this.adminId, messageId);
                         
                             successCount++;
                         } catch (error) {
                         
                             failCount++;
-                            this.logger.error(`❌ Failed to send to ${user}: ${error.message}`);
+                            this.logger.error(`❌ Failed to send to ${user.telegram_id}: ${error.message}`);
                         
                         }
                     
