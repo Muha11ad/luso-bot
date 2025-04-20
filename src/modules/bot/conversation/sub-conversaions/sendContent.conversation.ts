@@ -25,7 +25,9 @@ export class SendContentConversation implements IConversation {
     }
 
     public async handle(conversation: Conversation<MyContext>, ctx: MyContext) {
+
         try {
+        
             if (ctx.message.from.id !== this.adminId) {
                 await ctx.reply('Saloomaat 🫡');
                 return;
@@ -39,7 +41,7 @@ export class SendContentConversation implements IConversation {
             const users = await this.userHttpService.getAllUsers();
 
             const BATCH_SIZE = 30;
-            const DELAY_BETWEEN_BATCHES = 1000;
+            const DELAY_BETWEEN_BATCHES = 2000;
 
             let successCount = 0;
             let failCount = 0;
@@ -60,7 +62,7 @@ export class SendContentConversation implements IConversation {
                         } catch (error) {
                         
                             failCount++;
-                            this.logger.error(`❌ Failed to send to ${user.telegram_id}: ${error.message}`);
+                            console.error(`❌ Failed to send to ${user.telegram_id}: ${error.message}`);
                         
                         }
                     
@@ -71,7 +73,7 @@ export class SendContentConversation implements IConversation {
                 await this.delay(DELAY_BETWEEN_BATCHES);
             }
 
-            await ctx.reply(`🟢 Message delivery completed!\n\n✅ Sent: ${successCount}\n❌ Failed: ${failCount}`);
+            await ctx.reply(`🟢 Message delivery completed!\n\n✅ From: ${users.length} \n Sent: ${successCount}\n❌ Failed: ${failCount}`);
 
         } catch (error) {
 
