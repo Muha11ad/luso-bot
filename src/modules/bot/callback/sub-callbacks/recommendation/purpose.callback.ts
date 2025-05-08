@@ -50,6 +50,7 @@ export class PurposeCallback implements ICallback {
                 reply_markup: {
                     inline_keyboard: [[{ text: ctx.t('see_products'), url: webAppUrl }]],
                 },
+                parse_mode: 'HTML',
             })
 
         } catch (error) {
